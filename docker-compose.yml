@@ -1,0 +1,14 @@
+services:
+    tech_commerce_database:
+        container_name: tech_commerce
+        hostname: tech_commerce_database
+        image: postgres:latest
+        restart: always
+        environment:
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: root
+            POSTGRES_DB: db_tech
+        ports:
+            - '5432:5432'
+        volumes:
+            - ~/PostgreeDB:/var/lib/postgresql/data
