@@ -6,6 +6,9 @@ import sequelizeConnection from './config/database';
 
 import { adminRoute } from './admin/routes/adminRoute';
 import { restaurantRoute } from './modules/admin-restaurant/routes/restaurantRoute';
+import { authRoute } from './modules/auth/routes/authRoute';
+import { reportsRoute } from './modules/reports/routes/reportsRoute';
+import { usersRoute } from './modules/users/routes/usersRoute';
 
 dotenv.config();
 
@@ -40,7 +43,10 @@ class App {
 
     routes() {
         this.app.use('/api/admin', adminRoute);
-        this.app.use('/api/restaurant', restaurantRoute);
+        this.app.use('/api/restaurant-admin', restaurantRoute);
+        this.app.use('/api/auth', authRoute);
+        this.app.use('/api/reports', reportsRoute);
+        this.app.use('/api/users', usersRoute);
     }
 
     async connectionDatabase() {
