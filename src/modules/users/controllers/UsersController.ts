@@ -5,19 +5,20 @@ import { IUser } from '../model/interfaces/IUser';
 import { ErrorException } from '../../../utils/ErrorException';
 
 type BodyReceived = {
-    name: string;
+    first_name: string;
+    last_name: string;
     email: string;
     password: string;
 };
 class UserController {
     async createUserNormal(req: Request, res: Response) {
-        const { name, email, password }: BodyReceived = req.body;
+        const { first_name, last_name, email, password }: BodyReceived = req.body;
 
-        if (!name || !email || !password) {
+        if (!first_name || !last_name || !email || !password) {
             return res.status(400).json({ status: 400, error: 'Todos os campos são obrigatórios' });
         }
 
-        const obj: IUser = { name, email, password };
+        const obj: IUser = { first_name, last_name, email, password };
 
         try {
             const user = await new UserService().createUserNormal(obj);
@@ -42,7 +43,7 @@ class UserController {
         }
     }
 
-    // async createUserEmpresarial(req: Request, res: Response) {
+    // async createUserRestaurante(req: Request, res: Response) {
     //     const { name, email, password, cpfCnpj } = req.body;
 
     //     console.log('vindo da controller: ', req.body);
@@ -60,7 +61,7 @@ class UserController {
     //     }
     // }
 
-    // async createUserAdmin(req: Request, res: Response) {
+    // async createUserComercio(req: Request, res: Response) {
     //     const { name, email, password } = req.body;
 
     //     console.log('vindo da controller: ', req.body);

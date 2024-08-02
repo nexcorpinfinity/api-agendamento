@@ -1,17 +1,25 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelizeConnection from '../../../../config/database';
-import { IUser, IUserEmpresarial } from '../interfaces/IUser';
+import { IUser } from '../interfaces/IUser';
+import bcrypt from 'bcrypt';
 
-class User extends Model<IUser> {}
+class User extends Model<IUser> {
+    static isValidPassword: (password: string, hash: string) => boolean;
+    static hashPassword: (password: string) => string;
+}
 
 User.init(
     {
         id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
+            type: DataTypes.UUIDV4,
+            defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
-        name: {
+        first_name: {
+            type: DataTypes.STRING(128),
+            allowNull: false,
+        },
+        last_name: {
             type: DataTypes.STRING(128),
             allowNull: false,
         },
@@ -22,9 +30,13 @@ User.init(
         password: {
             type: DataTypes.STRING(128),
             allowNull: false,
+            set(value: string) {
+                const hash = bcrypt.hashSync(value, 16);
+                this.setDataValue('password', hash);
+            },
         },
-        permission: {
-            type: DataTypes.STRING(128),
+        roles: {
+            type: DataTypes.STRING(10),
             defaultValue: 'user',
         },
     },
@@ -35,76 +47,12 @@ User.init(
     },
 );
 
-class UserEmpresarial extends Model<IUserEmpresarial> {}
+User.hashPassword = function (password) {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(18));
+};
 
-UserEmpresarial.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-        },
-        name: {
-            type: DataTypes.STRING(128),
-            allowNull: false,
-        },
-        email: {
-            type: DataTypes.STRING(128),
-            allowNull: false,
-        },
-        password: {
-            type: DataTypes.STRING(128),
-            allowNull: false,
-        },
-        permission: {
-            type: DataTypes.STRING(128),
-            defaultValue: 'user-empresa',
-            allowNull: false,
-        },
-        cpfCnpj: {
-            type: DataTypes.STRING(14),
-            allowNull: true,
-        },
-    },
-    {
-        tableName: 'tb_users_empresarial',
-        sequelize: sequelizeConnection,
-        underscored: true,
-    },
-);
+User.isValidPassword = function (password: string, hash: string) {
+    return bcrypt.compareSync(password, hash);
+};
 
-class UserAdmin extends Model<IUser> {}
-
-UserAdmin.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-        },
-        name: {
-            type: DataTypes.STRING(128),
-            allowNull: false,
-        },
-        email: {
-            type: DataTypes.STRING(128),
-            allowNull: false,
-        },
-        password: {
-            type: DataTypes.STRING(128),
-            allowNull: false,
-        },
-        permission: {
-            type: DataTypes.STRING(128),
-            defaultValue: 'user-admin',
-            allowNull: false,
-        },
-    },
-    {
-        tableName: 'tb_users_admin',
-        sequelize: sequelizeConnection,
-        underscored: true,
-    },
-);
-
-export { User, UserEmpresarial, UserAdmin };
+export { User };
