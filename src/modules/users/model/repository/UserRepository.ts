@@ -1,15 +1,34 @@
 import { User } from '../entities/User';
+import { IUser } from '../interfaces/IUser';
 
 class UserRepository {
-    async createUserNormal(name: string, email: string, password: string) {
+    async createUserNormal(first_name: string, last_name: string, email: string, password: string) {
         try {
-            const usuarioRecebido = { name, email, password };
+            const usuarioRecebido: IUser = { first_name, last_name, email, password };
 
             await User.create(usuarioRecebido);
 
-            return { mensagem: 'Cadastrado feito com sucesso', userCreated: { name, email } };
+            return { mensagem: 'Cadastrado feito com sucesso', userCreated: { first_name, email } };
         } catch (error) {
             throw new Error(`Não foi possivel fazer o cadastro do Usuário: ${error}`);
+        }
+    }
+
+    async findByEmailAuth(emailParam: string) {
+        try {
+            const user = await User.findOne({
+                where: { email: emailParam },
+            });
+
+            if (!user) return null;
+
+            const data = user.dataValues;
+
+            const { id, first_name, email, password, roles } = data;
+
+            return { id, first_name, email, password, roles };
+        } catch (error) {
+            throw new Error(`Unable to find user: ${error}`);
         }
     }
 
@@ -42,15 +61,6 @@ class UserRepository {
     //         return user;
     //     } catch (error) {
     //         throw new Error(`Unable to create user: ${error}`);
-    //     }
-    // }
-
-    // async findById(userId: number) {
-    //     try {
-    //         const user = await User.findByPk(userId);
-    //         return user;
-    //     } catch (error) {
-    //         throw new Error(`Unable to find user: ${error}`);
     //     }
     // }
 

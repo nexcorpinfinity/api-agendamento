@@ -6,10 +6,13 @@ export default class UserService {
     async createUserNormal(userData: IUser) {
         const errors = [];
 
-        if (!userData.name || !userData.email || !userData.password) {
+        if (!userData.first_name || !userData.last_name || !userData.email || !userData.password) {
             errors.push({ message: 'Todos os campos é requerido', campo: 'Todos' });
         }
-        if (userData.name.length < 3) {
+        if (userData.first_name.length < 3) {
+            errors.push({ message: 'Campo nome não pode ser menor que 3 caracteres', campo: 'name' });
+        }
+        if (userData.last_name.length < 3) {
             errors.push({ message: 'Campo nome não pode ser menor que 3 caracteres', campo: 'name' });
         }
         if (userData.email.length < 3) {
@@ -22,7 +25,7 @@ export default class UserService {
         if (errors.length > 0) {
             throw new ErrorException(errors, 400);
         }
-        const user = await UserRepository.createUserNormal(userData.name, userData.email, userData.password);
+        const user = await UserRepository.createUserNormal(userData.first_name, userData.last_name, userData.email, userData.password);
 
         return user;
     }
