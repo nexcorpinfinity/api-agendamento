@@ -1,78 +1,112 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ErrorException } from '../../../utils/ErrorException';
 import { IUser } from '../model/interfaces/IUser';
 import UserRepository from '../model/repository/UserRepository';
+import { Role } from '../Permissions';
+import validator from 'validator';
 
 export default class UserService {
     async createUserNormal(userData: IUser) {
-        const errors = [];
+        const errors: any = [];
 
-        if (!userData.first_name || !userData.last_name || !userData.email || !userData.password) {
-            errors.push({ message: 'Todos os campos é requerido', campo: 'Todos' });
+        const firstName = userData.first_name?.trim() || '';
+        const lastName = userData.last_name?.trim() || '';
+        const email = userData.email?.trim() || '';
+        const password = userData.password?.trim() || '';
+
+        const fieldsToValidate = [
+            { value: firstName, fieldName: 'Nome' },
+            { value: lastName, fieldName: 'Sobrenome' },
+            { value: email, fieldName: 'Email' },
+            { value: password, fieldName: 'Senha' },
+        ];
+
+        fieldsToValidate.forEach((field) => {
+            this.validateEmptyField(field.value, field.fieldName, errors);
+        });
+
+        if (firstName.length < 3) {
+            errors.push({ message: 'Campo nome não pode ser menor que 3 caracteres', campo: 'Nome' });
         }
-        if (userData.first_name.length < 3) {
-            errors.push({ message: 'Campo nome não pode ser menor que 3 caracteres', campo: 'name' });
+        if (lastName.length < 3) {
+            errors.push({ message: 'Campo sobrenome não pode ser menor que 3 caracteres', campo: 'Sobrenome' });
         }
-        if (userData.last_name.length < 3) {
-            errors.push({ message: 'Campo nome não pode ser menor que 3 caracteres', campo: 'name' });
+        if (email.length < 3) {
+            errors.push({ message: 'Campo email não pode ser menor que 3 caracteres', campo: 'Email' });
         }
-        if (userData.email.length < 3) {
-            errors.push({ message: 'Campo email não pode ser menor que 3 caracteres', campo: 'email' });
+        if (password.length < 3) {
+            errors.push({ message: 'Campo password não pode ser menor que 3 caracteres', campo: 'Senha' });
         }
-        if (userData.password.length < 3) {
-            errors.push({ message: 'Campo password não pode ser menor que 3 caracteres', campo: 'password' });
+        if (!validator.isEmail(email)) {
+            errors.push({ message: 'Email invalido', campo: 'email' });
+        }
+        if (await UserRepository.validaEmailNoBanco(email)) {
+            errors.push({ message: 'Email já existe', campo: 'email' });
         }
 
         if (errors.length > 0) {
             throw new ErrorException(errors, 400);
         }
-        const user = await UserRepository.createUserNormal(userData.first_name, userData.last_name, userData.email, userData.password);
+
+        const permission = Role.User;
+
+        const user = await UserRepository.createUserNormal(firstName, lastName, email, password, permission);
 
         return user;
     }
 
-    // async createUserEmpresarial(userData: IUserEmpresarial) {
-    //     if (!userData.name || !userData.email || !userData.password || !userData.cpfCnpj) {
-    //         throw new Error('All campos are required');
-    //     }
+    public validateEmptyField(value: string, fieldName: string, errors: any[]) {
+        if (value === '') {
+            errors.push({ message: `Campo ${fieldName} não pode ficar vazio`, campo: fieldName });
+        }
+    }
 
-    //     const user = await UserRepository.createUserCorporativo(userData.name, userData.email, userData.password, userData.cpfCnpj);
-    //     return user;
-    // }
+    async createUserAdminGlobal(userData: IUser) {
+        const errors: any = [];
 
-    // async createUserAdmin(userData: IUser) {
-    //     if (!userData.name || !userData.email || !userData.password || !userData.permission) {
-    //         throw new Error('All fields are required');
-    //     }
+        const firstName = userData.first_name?.trim() || '';
+        const lastName = userData.last_name?.trim() || '';
+        const email = userData.email?.trim() || '';
+        const password = userData.password?.trim() || '';
 
-    //     console.log('vindo do service: ', userData);
+        const fieldsToValidate = [
+            { value: firstName, fieldName: 'Nome' },
+            { value: lastName, fieldName: 'Sobrenome' },
+            { value: email, fieldName: 'Email' },
+            { value: password, fieldName: 'Senha' },
+        ];
 
-    //     const user = await UserRepository.createUserAdmin(userData.name, userData.email, userData.password);
-    //     return user;
-    // }
+        fieldsToValidate.forEach((field) => {
+            this.validateEmptyField(field.value, field.fieldName, errors);
+        });
 
-    // async findById(userId: number) {
-    //     const user = await UserRepository.findById(userId);
-    //     if (!user) {
-    //         throw new Error('User not found');
-    //     }
-    //     return user;
-    // }
+        if (firstName.length < 3) {
+            errors.push({ message: 'Campo nome não pode ser menor que 3 caracteres', campo: 'Nome' });
+        }
+        if (lastName.length < 3) {
+            errors.push({ message: 'Campo sobrenome não pode ser menor que 3 caracteres', campo: 'Sobrenome' });
+        }
+        if (email.length < 3) {
+            errors.push({ message: 'Campo email não pode ser menor que 3 caracteres', campo: 'Email' });
+        }
+        if (password.length < 3) {
+            errors.push({ message: 'Campo password não pode ser menor que 3 caracteres', campo: 'Senha' });
+        }
+        if (!validator.isEmail(email)) {
+            errors.push({ message: 'Email invalido', campo: 'email' });
+        }
+        if (await UserRepository.validaEmailNoBanco(email)) {
+            errors.push({ message: 'Email já existe', campo: 'email' });
+        }
 
-    // async update(userId: number, updateData: Partial<IUser>) {
-    //     if (!userId) {
-    //         throw new Error('User ID is required');
-    //     }
+        if (errors.length > 0) {
+            throw new ErrorException(errors, 400);
+        }
 
-    //     const updatedUser = await UserRepository.update(userId, updateData);
-    //     return updatedUser;
-    // }
+        const permission = Role.Admin;
 
-    // async delete(userId: number) {
-    //     if (!userId) {
-    //         throw new Error('User ID is required');
-    //     }
+        const user = await UserRepository.createUserAdminG(firstName, lastName, email, password, permission);
 
-    //     const result = await UserRepository.delete(userId);
-    //     return result;
-    // }
+        return user;
+    }
 }

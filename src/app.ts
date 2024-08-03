@@ -5,14 +5,15 @@ import helmet from 'helmet';
 import sequelizeConnection from './config/database';
 
 import { adminRoute } from './admin/routes/adminRoute';
-import { restaurantRoute } from './modules/admin-restaurant/routes/restaurantRoute';
+import { restaurantRoute } from './modules/restaurant/routes/restaurantRoute';
 import { authRoute } from './modules/auth/routes/authRoute';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { reportsRoute } from './modules/reports/routes/reportsRoute';
 import { usersRoute } from './modules/users/routes/usersRoute';
 
 dotenv.config();
 
-const whitelist = ['http://localhost:3000'];
+const whitelist = ['http://localhost:3000', 'http://localhost:5173'];
 
 const corsOptions: cors.CorsOptions = {
     origin: function (origin, callback) {
@@ -43,9 +44,9 @@ class App {
 
     routes() {
         this.app.use('/api/admin', adminRoute);
-        this.app.use('/api/restaurant-admin', restaurantRoute);
         this.app.use('/api/auth', authRoute);
-        this.app.use('/api/reports', reportsRoute);
+        this.app.use('/api/commerce', restaurantRoute);
+        // this.app.use('/api/reports', reportsRoute);
         this.app.use('/api/users', usersRoute);
     }
 
