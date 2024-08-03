@@ -1,15 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import { decodeToken } from '../utils/DecodeToken';
 
-interface DecodedToken {
-    nomeDoUsuario: string;
-    emailDoUsuario: string;
-    permission: string[];
-    iat: number;
-    exp: number;
-}
-
-export const authenticateToken = (requiredPermission: string) => {
+export const authenticateToken = (requiredPermissions: string[]) => {
     return (req: Request, res: Response, next: NextFunction) => {
         const authHeader = req.headers.authorization;
         const token = authHeader && authHeader.split(' ')[0];
@@ -17,11 +9,14 @@ export const authenticateToken = (requiredPermission: string) => {
         if (!token) {
             return res.status(401).json({ message: 'Usuario não autenticado' });
         }
-
         try {
-            const decoded = jwt.verify(token, process.env.TOKEN_SECRET as string) as DecodedToken;
+            const decoded = decodeToken(token);
 
-            if (decoded.permission.includes(requiredPermission)) {
+            if (decoded === null) return res.status(403).json({ message: 'Forbidden or Token Invalid' });
+
+            const hasPermission = requiredPermissions.some((permission) => decoded.permission.includes(permission));
+
+            if (hasPermission) {
                 next();
             } else {
                 return res.status(403).json({ message: 'Acesso negado' });

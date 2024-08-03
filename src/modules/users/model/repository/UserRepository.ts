@@ -2,15 +2,45 @@ import { User } from '../entities/User';
 import { IUser } from '../interfaces/IUser';
 
 class UserRepository {
-    async createUserNormal(first_name: string, last_name: string, email: string, password: string) {
+    async createUserNormal(first_name: string, last_name: string, email: string, password: string, roles: string) {
         try {
-            const usuarioRecebido: IUser = { first_name, last_name, email, password };
+            const usuarioRecebido: IUser = { first_name, last_name, email, password, roles };
+
+            if ((await this.validaEmailNoBanco(usuarioRecebido.email)) === true) return 'Usuario ja existe';
+            await User.create(usuarioRecebido);
+
+            return { mensagem: 'Usuario created ', userCreated: { first_name, email } };
+        } catch (error) {
+            throw new Error(`Não foi possivel fazer o cadastro do Usuário: ${error}`);
+        }
+    }
+
+    async createUserAdminG(first_name: string, last_name: string, email: string, password: string, roles: string) {
+        try {
+            const usuarioRecebido: IUser = { first_name, last_name, email, password, roles };
+
+            console.log(usuarioRecebido);
+
+            this.validaEmailNoBanco(usuarioRecebido.email);
 
             await User.create(usuarioRecebido);
 
-            return { mensagem: 'Cadastrado feito com sucesso', userCreated: { first_name, email } };
+            return { mensagem: 'Admin created', userCreated: { first_name, email } };
         } catch (error) {
+            // console.log(error);
             throw new Error(`Não foi possivel fazer o cadastro do Usuário: ${error}`);
+        }
+    }
+
+    async validaEmailNoBanco(emailParam: string) {
+        const user = await User.findOne({
+            where: { email: emailParam },
+        });
+
+        if (user) {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -31,61 +61,6 @@ class UserRepository {
             throw new Error(`Unable to find user: ${error}`);
         }
     }
-
-    // async createUserCorporativo(name: string, email: string, password: string, cpfCnpj: string) {
-    //     try {
-    //         console.log('cheguei no repository: ');
-
-    //         const usuarioRecebido = { name, email, password, cpfCnpj };
-
-    //         const user = await User.create(usuarioRecebido);
-
-    //         console.log(user);
-
-    //         return user;
-    //     } catch (error) {
-    //         throw new Error(`Unable to create user: ${error}`);
-    //     }
-    // }
-
-    // async createUserAdmin(name: string, email: string, password: string) {
-    //     try {
-    //         console.log('cheguei no repository: ');
-
-    //         const usuarioRecebido = { name, email, password };
-
-    //         const user = await User.create(usuarioRecebido);
-
-    //         console.log(user);
-
-    //         return user;
-    //     } catch (error) {
-    //         throw new Error(`Unable to create user: ${error}`);
-    //     }
-    // }
-
-    // async update(userId: number, updateData: Partial<IUser>) {
-    //     try {
-    //         await User.update(updateData, {
-    //             where: { id: userId },
-    //         });
-    //         const updatedUser = await User.findByPk(userId);
-    //         return updatedUser;
-    //     } catch (error) {
-    //         throw new Error(`Unable to update user: ${error}`);
-    //     }
-    // }
-
-    // async delete(userId: number) {
-    //     try {
-    //         const result = await User.destroy({
-    //             where: { id: userId },
-    //         });
-    //         return result;
-    //     } catch (error) {
-    //         throw new Error(`Unable to delete user: ${error}`);
-    //     }
-    // }
 }
 
 export default new UserRepository();

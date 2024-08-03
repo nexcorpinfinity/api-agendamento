@@ -2,7 +2,13 @@ import { ErrorException } from '../../../utils/ErrorException';
 import jwt from 'jsonwebtoken';
 import UserRepository from '../../users/model/repository/UserRepository';
 import { User } from '../../users/model/entities/User';
+import { Request } from 'express';
+import { receberIdPeloToken } from '../../../utils/DecodeToken';
 
+interface UserLogged {
+    id: string;
+    permission: string[];
+}
 export default class AuthService {
     constructor() {}
 
@@ -32,6 +38,7 @@ export default class AuthService {
             throw new ErrorException(errors, 400);
         }
 
+        const idUser: number | undefined = user.id;
         const nomeDoUsuario: string | undefined = user.first_name;
         const emailDoUsuario: string | undefined = user.email;
         const permission: string | undefined = user.roles;
@@ -47,11 +54,31 @@ export default class AuthService {
             throw new ErrorException(errors, 400);
         }
 
-        const token = jwt.sign({ nomeDoUsuario, emailDoUsuario, permission }, process.env.TOKEN_SECRET as string, {
+        const token = jwt.sign({ idUser, nomeDoUsuario, emailDoUsuario, permission }, process.env.TOKEN_SECRET as string, {
             expiresIn: process.env.TOKEN_EXPIRATION,
         });
 
         console.log(token);
         return { token };
+    }
+
+    usuarioAutenticado(req: Request): UserLogged | undefined {
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader) {
+            console.error('O token é undefined');
+            return undefined;
+        }
+
+        console.log(req.headers);
+
+        const userLogged = receberIdPeloToken(authHeader);
+
+        if (!userLogged) {
+            console.error('Falha ao decodificar o token');
+            return undefined;
+        }
+
+        return userLogged;
     }
 }

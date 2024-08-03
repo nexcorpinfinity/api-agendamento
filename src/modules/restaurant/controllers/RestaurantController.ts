@@ -1,18 +1,40 @@
 import { Request, Response } from 'express';
-import { receberIdPeloToken } from '../../utils/DecodeToken';
-import AuthService from '../../modules/auth/services/AuthService';
+import AuthService from '../../auth/services/AuthService';
+import { receberIdPeloToken } from '../../../utils/DecodeToken';
 
-class AdminController {
+class RestaurantController {
     private authService: AuthService;
 
     constructor() {
         this.authService = new AuthService();
         this.index = this.index.bind(this);
+        this.createRestaurante = this.createRestaurante.bind(this);
+    }
+
+    createRestaurante(req: Request, res: Response) {
+        const userLogged = this.authService.usuarioAutenticado(req);
+
+        // console.log(userLogged); // { UUID e Permission }
+
+        if (userLogged === null || userLogged === undefined) return res.status(403).json('usuario nao autenticado');
+
+        const client_id = userLogged?.id;
+
+        const { comercioName, cpfcnpj, endereco } = req.body;
+
+        const obj = { comercioName, cpfcnpj, endereco, client_id };
+
+        console.log(obj);
+
+        // console.log(userLogged?.id, userLogged?.permission);
+
+        res.json('hello restaurante');
     }
 
     index(req: Request, res: Response) {
         const userLogged = this.authService.usuarioAutenticado(req);
         // obtem o id e a permissao, valida a permissao e deixa passasr para validar o resto no service
+        // aqui verifica a permissao de costumer e admin pode ter acesso a essa rota
         if (userLogged) {
             console.log(userLogged.id, userLogged.permission);
             res.json('hello Admin');
@@ -33,8 +55,6 @@ class AdminController {
 
         return userLogged;
     }
-
-    // dashBoard(req: Request, res: Response) {}
 }
 
-export default new AdminController();
+export default new RestaurantController();
