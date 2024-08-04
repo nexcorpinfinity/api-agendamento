@@ -1,34 +1,63 @@
 import { Request, Response } from 'express';
 import AuthService from '../../auth/services/AuthService';
 import { receberIdPeloToken } from '../../../utils/DecodeToken';
+import { ComercioBodyProps } from '../interface/BodyRequest';
+import ComercioService from '../services/ComercioService';
 
-class RestaurantController {
-    private authService: AuthService;
+import { Comercio } from '../entities/Commerce';
+import { User } from '../../users/entities/User';
+
+class CommerceController {
+    protected authService: AuthService;
 
     constructor() {
         this.authService = new AuthService();
         this.index = this.index.bind(this);
         this.createRestaurante = this.createRestaurante.bind(this);
+        this.trazerDadosDoUsuarioCompleto = this.trazerDadosDoUsuarioCompleto.bind(this);
     }
 
     createRestaurante(req: Request, res: Response) {
         const userLogged = this.authService.usuarioAutenticado(req);
 
-        // console.log(userLogged); // { UUID e Permission }
-
-        if (userLogged === null || userLogged === undefined) return res.status(403).json('usuario nao autenticado');
-
         const client_id = userLogged?.id;
 
-        const { comercioName, cpfcnpj, endereco } = req.body;
+        const { comercio_name, cpf_cnpj, endereco } = req.body;
 
-        const obj = { comercioName, cpfcnpj, endereco, client_id };
+        const obj: ComercioBodyProps = { comercio_name, cpf_cnpj, endereco, client_id };
 
-        console.log(obj);
+        const criarComercios = new ComercioService().criarComercio(obj);
 
         // console.log(userLogged?.id, userLogged?.permission);
 
-        res.json('hello restaurante');
+        res.json(criarComercios);
+    }
+
+    async trazerDadosDoUsuarioCompleto(req: Request, res: Response) {
+        const userLogged = this.authService.usuarioAutenticado(req);
+
+        const user = await User.findByPk(userLogged?.id, {
+            include: Comercio,
+        });
+
+        if (!user) {
+            return res.status(404).json({ mensagem: 'Usuário não encontrado' });
+        }
+
+        const userJson = user.toJSON();
+
+        const testiser = {
+            ...userJson,
+            password: undefined,
+            roles: undefined,
+            Comercio: {
+                ...userJson.Comercio,
+                cpf_cpnj: undefined,
+                usuario_id: undefined,
+            },
+        };
+        console.log(userLogged);
+        res.json(testiser);
     }
 
     index(req: Request, res: Response) {
@@ -57,4 +86,4 @@ class RestaurantController {
     }
 }
 
-export default new RestaurantController();
+export default new CommerceController();

@@ -5,7 +5,7 @@ import helmet from 'helmet';
 import sequelizeConnection from './config/database';
 
 import { adminRoute } from './admin/routes/adminRoute';
-import { restaurantRoute } from './modules/restaurant/routes/restaurantRoute';
+import { restaurantRoute } from './modules/commerces/routes/restaurantRoute';
 import { authRoute } from './modules/auth/routes/authRoute';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { reportsRoute } from './modules/reports/routes/reportsRoute';

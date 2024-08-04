@@ -1,9 +1,9 @@
 import { ErrorException } from '../../../utils/ErrorException';
 import jwt from 'jsonwebtoken';
-import UserRepository from '../../users/model/repository/UserRepository';
-import { User } from '../../users/model/entities/User';
+import UserRepository from '../../users/repository/UserRepository';
 import { Request } from 'express';
 import { receberIdPeloToken } from '../../../utils/DecodeToken';
+import { User } from '../../users/entities/User';
 
 interface UserLogged {
     id: string;

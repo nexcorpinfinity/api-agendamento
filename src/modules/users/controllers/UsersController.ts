@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
 import UserService from '../services/UserService';
-import { IUser } from '../model/interfaces/IUser';
 import { ErrorException } from '../../../utils/ErrorException';
+import { IUser } from '../interfaces/IUser';
 
 type BodyReceived = {
     first_name: string;

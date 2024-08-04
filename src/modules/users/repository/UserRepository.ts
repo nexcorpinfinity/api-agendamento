@@ -6,7 +6,8 @@ class UserRepository {
         try {
             const usuarioRecebido: IUser = { first_name, last_name, email, password, roles };
 
-            if ((await this.validaEmailNoBanco(usuarioRecebido.email)) === true) return 'Usuario ja existe';
+            if ((await this.validaEmailNoBanco(usuarioRecebido.email)) === true) return 'Email ja existe';
+
             await User.create(usuarioRecebido);
 
             return { mensagem: 'Usuario created ', userCreated: { first_name, email } };

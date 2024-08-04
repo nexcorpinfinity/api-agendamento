@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ErrorException } from '../../../utils/ErrorException';
-import { IUser } from '../model/interfaces/IUser';
-import UserRepository from '../model/repository/UserRepository';
+
+import UserRepository from '../repository/UserRepository';
 import { Role } from '../Permissions';
 import validator from 'validator';
+import { IUser } from '../interfaces/IUser';
 
 export default class UserService {
     async createUserNormal(userData: IUser) {
@@ -37,9 +38,11 @@ export default class UserService {
         if (password.length < 3) {
             errors.push({ message: 'Campo password não pode ser menor que 3 caracteres', campo: 'Senha' });
         }
+
         if (!validator.isEmail(email)) {
             errors.push({ message: 'Email invalido', campo: 'email' });
         }
+
         if (await UserRepository.validaEmailNoBanco(email)) {
             errors.push({ message: 'Email já existe', campo: 'email' });
         }

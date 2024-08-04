@@ -7,6 +7,7 @@ export interface IUser {
     roles?: string;
     createdAt?: Date;
     updatedAt?: Date;
+    Comercio?: [];
 }
 
 export interface IUserEmpresarial extends IUser {
