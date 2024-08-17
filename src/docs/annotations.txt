@@ -1,0 +1,9 @@
+user admin
+ user comercio
+
+user client pode visualizar o cardapio, fazer pedidos, alterar a conta dele, ver todos pedidos feitos,
+
+implementar acl, o admin controla tudo , o comercio controla apenas o comercio dele
+
+criar o controle de estoque
+criar os update delete, corrigir as classes

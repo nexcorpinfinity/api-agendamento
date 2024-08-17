@@ -1,9 +1,9 @@
 import { ErrorException } from '../../../utils/ErrorException';
 import jwt from 'jsonwebtoken';
-import UserRepository from '../../users/model/repository/UserRepository';
-import { User } from '../../users/model/entities/User';
+import UserRepository from '../../users/repository/UserRepository';
 import { Request } from 'express';
 import { receberIdPeloToken } from '../../../utils/DecodeToken';
+import { User } from '../../users/entities/User';
 
 interface UserLogged {
     id: string;
@@ -59,6 +59,7 @@ export default class AuthService {
         });
 
         console.log(token);
+
         return { token };
     }
 
@@ -69,10 +70,13 @@ export default class AuthService {
             console.error('O token é undefined');
             return undefined;
         }
+        const token = authHeader.split(' ')[1];
 
-        console.log(req.headers);
+        console.log(token);
 
-        const userLogged = receberIdPeloToken(authHeader);
+        const userLogged = receberIdPeloToken(token);
+
+        console.log(userLogged);
 
         if (!userLogged) {
             console.error('Falha ao decodificar o token');

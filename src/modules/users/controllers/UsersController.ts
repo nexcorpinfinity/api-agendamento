@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
 import UserService from '../services/UserService';
-import { IUser } from '../model/interfaces/IUser';
 import { ErrorException } from '../../../utils/ErrorException';
+import { IUser } from '../interfaces/IUser';
 
 type BodyReceived = {
     first_name: string;
@@ -11,6 +11,8 @@ type BodyReceived = {
     password: string;
 };
 class UserController {
+    constructor() {}
+
     async createUserNormal(req: Request, res: Response) {
         const { first_name, last_name, email, password }: BodyReceived = req.body;
 
@@ -18,7 +20,10 @@ class UserController {
 
         try {
             const user = await new UserService().createUserNormal(obj);
-            // controler > service > repository < entidade
+
+            console.log(user);
+
+            // controler > service > repository < model
             res.status(201).json({
                 status: 201,
                 response: user,

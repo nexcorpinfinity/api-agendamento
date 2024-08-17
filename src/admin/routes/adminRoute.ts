@@ -6,6 +6,6 @@ import { Role } from '../../modules/users/Permissions';
 
 const adminRoute: Router = Router();
 
-adminRoute.get('/', authenticateToken([Role.Admin]), AuthLoginRequired, AdminController.index);
+adminRoute.get('/', AuthLoginRequired, authenticateToken([Role.User]), AdminController.index);
 
 export { adminRoute };

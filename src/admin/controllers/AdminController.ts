@@ -11,14 +11,16 @@ class AdminController {
     }
 
     index(req: Request, res: Response) {
-        const userLogged = this.authService.usuarioAutenticado(req);
-        // obtem o id e a permissao, valida a permissao e deixa passasr para validar o resto no service
-        if (userLogged) {
-            console.log(userLogged.id, userLogged.permission);
-            res.json('hello Admin');
-        } else {
-            res.status(401).json({ message: 'Usuário não autenticado' });
-        }
+        // const userLogged = this.authService.usuarioAutenticado(req);
+        // // obtem o id e a permissao, valida a permissao e deixa passasr para validar o resto no service
+        // if (userLogged) {
+        //     console.log(userLogged.id, userLogged.permission);
+        //     res.json('hello Admin');
+        // } else {
+        //     res.status(401).json({ message: 'Usuário não autenticado' });
+        // }
+
+        res.json('hello admin');
     }
 
     usuarioAutenticado(req: Request) {

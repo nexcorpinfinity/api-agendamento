@@ -1,33 +1,34 @@
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('tb_users', {
+        await queryInterface.createTable('tb_comercio', {
             id: {
                 type: Sequelize.UUID,
                 defaultValue: Sequelize.UUIDV4,
                 allowNull: false,
                 primaryKey: true,
             },
-            first_name: {
+            comercio_name: {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            last_name: {
+            cpf_cpnj: {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            email: {
+            endereco: {
                 type: Sequelize.STRING,
                 allowNull: false,
+            },
+            usuario_id: {
+                type: Sequelize.UUID,
+                references: {
+                    model: 'tb_users',
+                    key: 'id',
+                },
                 unique: true,
-            },
-            password: {
-                type: Sequelize.STRING,
-                allowNull: false,
-            },
-            roles: {
-                type: Sequelize.STRING,
                 allowNull: true,
-                defaultValue: 'user',
+                onUpdate: 'CASCADE',
+                onDelete: 'SET NULL',
             },
             created_at: {
                 type: Sequelize.DATE,
@@ -41,6 +42,6 @@ module.exports = {
     },
 
     async down(queryInterface) {
-        await queryInterface.dropTable('tb_users');
+        await queryInterface.dropTable('tb_comercio');
     },
 };
