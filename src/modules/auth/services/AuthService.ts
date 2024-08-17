@@ -59,6 +59,7 @@ export default class AuthService {
         });
 
         console.log(token);
+
         return { token };
     }
 
@@ -69,10 +70,13 @@ export default class AuthService {
             console.error('O token é undefined');
             return undefined;
         }
+        const token = authHeader.split(' ')[1];
 
-        console.log(req.headers);
+        console.log(token);
 
-        const userLogged = receberIdPeloToken(authHeader);
+        const userLogged = receberIdPeloToken(token);
+
+        console.log(userLogged);
 
         if (!userLogged) {
             console.error('Falha ao decodificar o token');

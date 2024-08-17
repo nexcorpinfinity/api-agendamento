@@ -6,6 +6,7 @@ import ComercioService from '../services/ComercioService';
 
 import { Comercio } from '../entities/Commerce';
 import { User } from '../../users/entities/User';
+import { Produto } from '../entities/Products';
 
 class CommerceController {
     protected authService: AuthService;
@@ -13,12 +14,22 @@ class CommerceController {
     constructor() {
         this.authService = new AuthService();
         this.index = this.index.bind(this);
+
         this.createRestaurante = this.createRestaurante.bind(this);
         this.trazerDadosDoUsuarioCompleto = this.trazerDadosDoUsuarioCompleto.bind(this);
     }
 
     createRestaurante(req: Request, res: Response) {
         const userLogged = this.authService.usuarioAutenticado(req);
+
+        this.createComercio = this.createComercio.bind(this);
+        this.trazerDadosDoUsuarioCompleto = this.trazerDadosDoUsuarioCompleto.bind(this);
+    }
+
+    createComercio(req: Request, res: Response) {
+        const userLogged = this.authService.usuarioAutenticado(req);
+
+        console.log(userLogged);
 
         const client_id = userLogged?.id;
 
@@ -37,7 +48,10 @@ class CommerceController {
         const userLogged = this.authService.usuarioAutenticado(req);
 
         const user = await User.findByPk(userLogged?.id, {
-            include: Comercio,
+            include: {
+                model: Comercio,
+                include: [Produto],
+            },
         });
 
         if (!user) {
@@ -46,6 +60,7 @@ class CommerceController {
 
         const userJson = user.toJSON();
 
+        /* ocultar alguns campos  */
         const testiser = {
             ...userJson,
             password: undefined,
@@ -62,8 +77,9 @@ class CommerceController {
 
     index(req: Request, res: Response) {
         const userLogged = this.authService.usuarioAutenticado(req);
-        // obtem o id e a permissao, valida a permissao e deixa passasr para validar o resto no service
-        // aqui verifica a permissao de costumer e admin pode ter acesso a essa rota
+
+        /* obtem o id e a permissao, valida a permissao e deixa passasr para validar o resto no service
+        aqui verifica a permissao de costumer e admin pode ter acesso a essa rota */
         if (userLogged) {
             console.log(userLogged.id, userLogged.permission);
             res.json('hello Admin');

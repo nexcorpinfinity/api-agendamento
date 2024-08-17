@@ -10,6 +10,8 @@ export default class UserService {
     async createUserNormal(userData: IUser) {
         const errors: any = [];
 
+        console.log(userData);
+
         const firstName = userData.first_name?.trim() || '';
         const lastName = userData.last_name?.trim() || '';
         const email = userData.email?.trim() || '';

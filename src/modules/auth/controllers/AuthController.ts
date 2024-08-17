@@ -6,7 +6,7 @@ import { ErrorException } from '../../../utils/ErrorException';
 class AuthController {
     async store(req: Request, res: Response): Promise<Response> {
         const { email, password } = req.body;
-
+        console.log(req.body);
         if (!email || !password) {
             return res.status(401).json({ status: 400, errors: ['Credenciais inválidas'] });
         }
@@ -17,6 +17,13 @@ class AuthController {
             if (tokenReturn === null) {
                 return res.status(401).json({ status: 400, errors: 'Usuário não existe' });
             }
+
+            res.cookie('token', tokenReturn.token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'strict',
+                maxAge: 3600000,
+            });
 
             return res.status(200).json(tokenReturn);
         } catch (error: any) {

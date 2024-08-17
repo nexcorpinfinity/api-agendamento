@@ -1,14 +1,14 @@
 services:
-    tech_commerce_database:
-        container_name: tech_commerce
-        hostname: tech_commerce_database
+    database:
+        container_name: saas_teste
+        hostname: saas_teste_database
         image: postgres:latest
         restart: always
         environment:
             POSTGRES_USER: root
             POSTGRES_PASSWORD: root
-            POSTGRES_DB: db_tech
+            POSTGRES_DB: saas_teste
         ports:
             - '5432:5432'
         volumes:
-            - ~/tech_commerce:/var/lib/postgresql/data
+            - ~/saas_teste:/var/lib/postgresql/data
