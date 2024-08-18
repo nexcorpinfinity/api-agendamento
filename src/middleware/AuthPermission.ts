@@ -35,6 +35,7 @@ export const authenticateToken = (requiredPermissions: string[]) => {
 
         try {
             const decoded = decodeToken(tokenFinal);
+            console.log(decoded);
 
             if (decoded === null) return res.status(403).json({ message: 'Forbidden or Token Invalid' });
 

@@ -14,7 +14,7 @@ import { usersRoute } from './modules/users/routes/usersRoute';
 
 dotenv.config();
 
-const whitelist = ['http://localhost:3000', 'http://127.0.0.1:5173'];
+const whitelist = ['http://localhost:3000', 'http://127.0.0.1:5173', 'http://localhost:5173'];
 
 const corsOptions: cors.CorsOptions = {
     origin: function (origin, callback) {
@@ -24,6 +24,7 @@ const corsOptions: cors.CorsOptions = {
             callback(new Error('Not allowed by CORS'));
         }
     },
+    credentials: true,
 };
 
 class App {
