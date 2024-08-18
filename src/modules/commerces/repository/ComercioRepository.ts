@@ -8,6 +8,8 @@ class CommerceRepository {
         try {
             const objRecebido = { comercio_name, cpf_cpnj, endereco, usuario_id };
 
+            console.log(objRecebido);
+
             const user = await User.findByPk(objRecebido.usuario_id);
 
             if (user === null) {
@@ -24,6 +26,7 @@ class CommerceRepository {
 
             return { mensagem: 'restaurante criado', objRecebido };
         } catch (error) {
+            console.log(error);
             throw new Error(`Não foi possivel fazer o cadastro do Usuário: ${error}`);
         }
     }

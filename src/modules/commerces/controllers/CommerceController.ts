@@ -15,13 +15,6 @@ class CommerceController {
         this.authService = new AuthService();
         this.index = this.index.bind(this);
 
-        this.createRestaurante = this.createRestaurante.bind(this);
-        this.trazerDadosDoUsuarioCompleto = this.trazerDadosDoUsuarioCompleto.bind(this);
-    }
-
-    createRestaurante(req: Request, res: Response) {
-        const userLogged = this.authService.usuarioAutenticado(req);
-
         this.createComercio = this.createComercio.bind(this);
         this.trazerDadosDoUsuarioCompleto = this.trazerDadosDoUsuarioCompleto.bind(this);
     }
@@ -38,8 +31,6 @@ class CommerceController {
         const obj: ComercioBodyProps = { comercio_name, cpf_cnpj, endereco, client_id };
 
         const criarComercios = new ComercioService().criarComercio(obj);
-
-        // console.log(userLogged?.id, userLogged?.permission);
 
         res.json(criarComercios);
     }
