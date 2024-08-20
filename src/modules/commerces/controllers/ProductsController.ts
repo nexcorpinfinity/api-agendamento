@@ -24,11 +24,12 @@ class ProductsController {
 
         const idRestaurante = buscarRestaurante?.dataValues.id;
 
-        const { product_name, price } = req.body;
+        const { product_name, price, quantidade } = req.body;
 
         const produto = await Produto.create({
             product_name,
             price,
+            quantidade,
             comercio_id: idRestaurante,
         });
 

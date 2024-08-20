@@ -15,13 +15,16 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
+            quantidade: {
+                type: Sequelize.STRING,
+                allowNull: false,
+            },
             comercio_id: {
                 type: Sequelize.UUID,
                 references: {
                     model: 'tb_comercio',
                     key: 'id',
                 },
-                unique: true,
                 allowNull: true,
                 onUpdate: 'CASCADE',
                 onDelete: 'SET NULL',

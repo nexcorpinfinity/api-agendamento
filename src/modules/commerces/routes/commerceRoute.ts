@@ -11,8 +11,8 @@ commerceRoute.get('/usuario', authenticateToken([Role.Admin, Role.Costumer]), Au
 
 commerceRoute.post('/cadastrar', AuthLoginRequired, CommerceController.createComercio);
 
-commerceRoute.post('/cadastrar-produtos', authenticateToken([Role.Costumer, Role.Admin]), AuthLoginRequired, ProductsController.cadastrarProdutos);
+commerceRoute.post('/cadastrar-produtos', AuthLoginRequired, authenticateToken([Role.Costumer, Role.Admin]), ProductsController.cadastrarProdutos);
 
-commerceRoute.get('/meus-produtos-cadastrados', authenticateToken([Role.Costumer]), ProductsController.trazerProdutosDoCostumer);
+commerceRoute.get('/meus-produtos-cadastrados', AuthLoginRequired, authenticateToken([Role.Costumer]), ProductsController.trazerProdutosDoCostumer);
 
 export { commerceRoute };

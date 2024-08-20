@@ -19,6 +19,10 @@ Produto.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        quantidade: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
         comercio_id: {
             type: DataTypes.UUID,
             references: {
