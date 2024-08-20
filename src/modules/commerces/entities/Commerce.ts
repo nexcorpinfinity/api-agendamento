@@ -1,6 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelizeConnection from '../../../config/database';
 import { User } from '../../users/entities/User';
+
 class Comercio extends Model {}
 
 Comercio.init(

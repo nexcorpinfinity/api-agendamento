@@ -8,7 +8,7 @@ class AuthController {
         const { email, password } = req.body;
         console.log(req.body);
         if (!email || !password) {
-            return res.status(401).json({ status: 400, errors: ['Credenciais inválidas'] });
+            return res.status(401).json({ status: 400, errors: 'Credenciais inválidas' });
         }
 
         try {
