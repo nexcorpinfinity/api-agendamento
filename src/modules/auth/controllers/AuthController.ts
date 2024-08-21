@@ -18,12 +18,12 @@ class AuthController {
                 return res.status(401).json({ status: 400, errors: 'Usuário não existe' });
             }
 
-            res.cookie('token', tokenReturn.token, {
-                httpOnly: true,
-                secure: true,
-                sameSite: 'none',
-                maxAge: 3600000,
-            });
+            // res.cookie('token', tokenReturn.token, {
+            //     httpOnly: true,
+            //     secure: true,
+            //     sameSite: 'none',
+            //     maxAge: 3600000,
+            // });
 
             return res.status(200).json(tokenReturn);
         } catch (error: any) {
