@@ -10,9 +10,11 @@ import { Produto } from '../entities/Products';
 
 class CommerceController {
     protected authService: AuthService;
+    private comercioService: ComercioService;
 
     constructor() {
         this.authService = new AuthService();
+        this.comercioService = new ComercioService();
         this.index = this.index.bind(this);
 
         this.createComercio = this.createComercio.bind(this);
@@ -30,7 +32,7 @@ class CommerceController {
 
         const obj: ComercioBodyProps = { comercio_name, cpf_cnpj, endereco, client_id };
 
-        const criarComercios = new ComercioService().criarComercio(obj);
+        const criarComercios = this.comercioService.criarComercio(obj);
 
         res.json(criarComercios);
     }

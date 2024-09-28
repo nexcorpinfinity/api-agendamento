@@ -15,4 +15,10 @@ commerceRoute.post('/cadastrar-produtos', AuthLoginRequired, authenticateToken([
 
 commerceRoute.get('/meus-produtos-cadastrados', AuthLoginRequired, authenticateToken([Role.Costumer]), ProductsController.trazerProdutosDoCostumer);
 
+commerceRoute.post('/realizar-vendas', AuthLoginRequired, authenticateToken([Role.Costumer]), ProductsController.realizarVendaDeProduto);
+
+commerceRoute.put('/atualizar-produto/:id', AuthLoginRequired, authenticateToken([Role.Costumer]), ProductsController.atualizarProduto);
+
+commerceRoute.delete('/deletar-produto/:id', AuthLoginRequired, authenticateToken([Role.Costumer]), ProductsController.deletarProduto);
+
 export { commerceRoute };

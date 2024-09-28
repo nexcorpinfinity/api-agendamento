@@ -3,7 +3,7 @@ import { Role } from '../../users/Permissions';
 
 import { Comercio } from '../entities/Commerce';
 
-class CommerceRepository {
+export class CommerceRepository {
     async createCommerce(comercio_name: string, cpf_cpnj: string, endereco: string, usuario_id: string) {
         try {
             const objRecebido = { comercio_name, cpf_cpnj, endereco, usuario_id };
@@ -31,5 +31,3 @@ class CommerceRepository {
         }
     }
 }
-
-export default new CommerceRepository();
