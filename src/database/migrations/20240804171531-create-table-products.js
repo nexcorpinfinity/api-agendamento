@@ -12,11 +12,11 @@ module.exports = {
                 allowNull: false,
             },
             price: {
-                type: Sequelize.STRING,
+                type: Sequelize.FLOAT,
                 allowNull: false,
             },
             quantidade: {
-                type: Sequelize.STRING,
+                type: Sequelize.INTEGER,
                 allowNull: false,
             },
             comercio_id: {

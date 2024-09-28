@@ -1,7 +1,7 @@
 import express, { Express } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import helmet from 'helmet';
+// import helmet from 'helmet';
 import sequelizeConnection from './config/database';
 
 import { adminRoute } from './admin/routes/adminRoute';
@@ -14,7 +14,7 @@ import { usersRoute } from './modules/users/routes/usersRoute';
 
 dotenv.config();
 
-const whitelist = ['http://localhost:3000', 'http://127.0.0.1:5173', 'http://localhost:5173'];
+const whitelist = [process.env.WHITELIST1, process.env.WHITELIST2, process.env.WHITELIST3];
 
 const corsOptions: cors.CorsOptions = {
     origin: function (origin, callback) {
@@ -39,7 +39,7 @@ class App {
 
     middlewares() {
         this.app.use(cors(corsOptions));
-        this.app.use(helmet());
+        // this.app.use(helmet());
         this.app.use(express.urlencoded({ extended: true }));
         this.app.use(express.json());
     }

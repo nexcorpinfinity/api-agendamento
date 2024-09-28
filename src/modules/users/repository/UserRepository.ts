@@ -1,14 +1,16 @@
 import { User } from '../entities/User';
 import { IUser } from '../interfaces/IUser';
 
-class UserRepository {
+export class UserRepository {
+    constructor(protected user = User) {}
+
     async createUserNormal(first_name: string, last_name: string, email: string, password: string, roles: string) {
         try {
             const usuarioRecebido: IUser = { first_name, last_name, email, password, roles };
 
-            if ((await this.validaEmailNoBanco(usuarioRecebido.email)) === true) return 'Email ja existe';
+            // if ((await this.validaEmailNoBanco(usuarioRecebido.email)) === true) return 'Email ja existe';
 
-            await User.create(usuarioRecebido);
+            await this.user.create(usuarioRecebido);
 
             return { mensagem: 'Usuario created ', userCreated: { first_name, email } };
         } catch (error) {
@@ -24,7 +26,7 @@ class UserRepository {
 
             this.validaEmailNoBanco(usuarioRecebido.email);
 
-            await User.create(usuarioRecebido);
+            await this.user.create(usuarioRecebido);
 
             return { mensagem: 'Admin created', userCreated: { first_name, email } };
         } catch (error) {
@@ -34,7 +36,7 @@ class UserRepository {
     }
 
     async validaEmailNoBanco(emailParam: string) {
-        const user = await User.findOne({
+        const user = await this.user.findOne({
             where: { email: emailParam },
         });
 
@@ -63,5 +65,3 @@ class UserRepository {
         }
     }
 }
-
-export default new UserRepository();

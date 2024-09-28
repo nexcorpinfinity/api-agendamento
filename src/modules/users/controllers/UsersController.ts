@@ -11,7 +11,12 @@ type BodyReceived = {
     password: string;
 };
 class UserController {
-    constructor() {}
+    private userService: UserService;
+
+    constructor() {
+        this.userService = new UserService();
+        this.createUserNormal = this.createUserNormal.bind(this);
+    }
 
     async createUserNormal(req: Request, res: Response) {
         const { first_name, last_name, email, password }: BodyReceived = req.body;
@@ -19,7 +24,7 @@ class UserController {
         const obj: IUser = { first_name, last_name, email, password };
 
         try {
-            const user = await new UserService().createUserNormal(obj);
+            const user = await this.userService.createUserNormal(obj);
 
             console.log(user);
 
@@ -54,7 +59,7 @@ class UserController {
         const obj: IUser = { first_name, last_name, email, password };
 
         try {
-            const user = await new UserService().createUserAdminGlobal(obj);
+            const user = await this.userService.createUserAdminGlobal(obj);
 
             res.status(201).json({
                 status: 201,

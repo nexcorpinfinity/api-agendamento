@@ -1,16 +1,20 @@
 import { ErrorException } from '../../../utils/ErrorException';
 import jwt from 'jsonwebtoken';
-import UserRepository from '../../users/repository/UserRepository';
 import { Request } from 'express';
 import { receberIdPeloToken } from '../../../utils/DecodeToken';
 import { User } from '../../users/entities/User';
+import { UserRepository } from '../../users/repository/UserRepository';
 
 interface UserLogged {
     id: string;
     permission: string[];
 }
 export default class AuthService {
-    constructor() {}
+    private userRepository: UserRepository;
+
+    constructor() {
+        this.userRepository = new UserRepository();
+    }
 
     async autenticarUsuario(email: string, password: string) {
         const errors = [];
@@ -29,7 +33,7 @@ export default class AuthService {
         // }
 
         // faz uma consulta no banco com o email informado
-        const user = await UserRepository.findByEmailAuth(email);
+        const user = await this.userRepository.findByEmailAuth(email);
 
         console.log(user);
 

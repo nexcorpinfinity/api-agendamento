@@ -1,14 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ErrorException } from '../../../utils/ErrorException';
 
-import UserRepository from '../repository/UserRepository';
 import { Role } from '../Permissions';
 import validator from 'validator';
 import { IUser } from '../interfaces/IUser';
+import { UserRepository } from '../repository/UserRepository';
 
+type ErrorsProtocol = {
+    message: string;
+    campo: string;
+};
 export default class UserService {
+    private userRepository: UserRepository;
+
+    constructor() {
+        this.userRepository = new UserRepository();
+    }
+
     async createUserNormal(userData: IUser) {
-        const errors: any = [];
+        const errors: Array<ErrorsProtocol> = [];
 
         console.log(userData);
 
@@ -45,7 +55,7 @@ export default class UserService {
             errors.push({ message: 'Email invalido', campo: 'email' });
         }
 
-        if (await UserRepository.validaEmailNoBanco(email)) {
+        if (await this.userRepository.validaEmailNoBanco(email)) {
             errors.push({ message: 'Email já existe', campo: 'email' });
         }
 
@@ -55,7 +65,7 @@ export default class UserService {
 
         const permission = Role.User;
 
-        const user = await UserRepository.createUserNormal(firstName, lastName, email, password, permission);
+        const user = await this.userRepository.createUserNormal(firstName, lastName, email, password, permission);
 
         return user;
     }
@@ -100,7 +110,7 @@ export default class UserService {
         if (!validator.isEmail(email)) {
             errors.push({ message: 'Email invalido', campo: 'email' });
         }
-        if (await UserRepository.validaEmailNoBanco(email)) {
+        if (await this.userRepository.validaEmailNoBanco(email)) {
             errors.push({ message: 'Email já existe', campo: 'email' });
         }
 
@@ -110,7 +120,7 @@ export default class UserService {
 
         const permission = Role.Admin;
 
-        const user = await UserRepository.createUserAdminG(firstName, lastName, email, password, permission);
+        const user = await this.userRepository.createUserAdminG(firstName, lastName, email, password, permission);
 
         return user;
     }
