@@ -40,6 +40,10 @@ class CommerceController {
     async trazerDadosDoUsuarioCompleto(req: Request, res: Response) {
         const userLogged = this.authService.usuarioAutenticado(req);
 
+        const { ativos } = req.query;
+
+        console.log('teste:', ativos);
+
         const user = await User.findByPk(userLogged?.id, {
             include: {
                 model: Comercio,

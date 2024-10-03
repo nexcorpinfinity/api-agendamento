@@ -1,9 +1,16 @@
 user admin
- user comercio
+user comercio
 
-user client pode visualizar o cardapio, fazer pedidos, alterar a conta dele, ver todos pedidos feitos,
-
-implementar acl, o admin controla tudo , o comercio controla apenas o comercio dele
-
-criar o controle de estoque
 criar os update delete, corrigir as classes
+
+criar as tabelas de vendas / array de produtos
+criar tabela de planos e vincular ao usuario customer quando criar a conta n sei
+refazer talvez a tabela de usuario na criação
+
+criar um token para plano gratuito / outros planos com data de expiração de 15 dias / 30 dias
+
+rota para relatorios / com despesas / vendas / controle financeiro
+
+sistema de log com json ou com txt rota para logs
+
+rota de admin
