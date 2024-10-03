@@ -10,8 +10,9 @@ type ErrorsProtocol = {
     message: string;
     campo: string;
 };
+
 export default class UserService {
-    private userRepository: UserRepository;
+    private readonly userRepository: UserRepository;
 
     constructor() {
         this.userRepository = new UserRepository();

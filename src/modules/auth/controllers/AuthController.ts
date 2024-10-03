@@ -4,10 +4,11 @@ import AuthService from '../services/AuthService';
 import { ErrorException } from '../../../utils/ErrorException';
 
 class AuthController {
-    private authService: AuthService;
+    private readonly authService: AuthService;
 
     constructor() {
         this.authService = new AuthService();
+        this.store = this.store.bind(this);
     }
 
     async store(req: Request, res: Response): Promise<Response> {

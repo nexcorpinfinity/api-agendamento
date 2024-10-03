@@ -16,11 +16,11 @@ Produto.init(
             allowNull: false,
         },
         price: {
-            type: DataTypes.STRING,
+            type: DataTypes.FLOAT,
             allowNull: false,
         },
         quantidade: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
         comercio_id: {
