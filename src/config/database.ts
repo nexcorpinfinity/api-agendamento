@@ -16,7 +16,7 @@ if (!dbName || !dbUser || !dbPassword || !dbHost || !dbPort) {
 const sequelizeConnection = new Sequelize(dbName, dbUser, dbPassword, {
     host: dbHost,
     port: parseInt(dbPort, 10),
-    dialect: 'postgres',
+    dialect: 'mysql',
     logging: console.log,
 
     define: {
@@ -25,10 +25,6 @@ const sequelizeConnection = new Sequelize(dbName, dbUser, dbPassword, {
         createdAt: 'created_at',
         updatedAt: 'updated_at',
     },
-    dialectOptions: {
-        timezone: 'America/Sao_Paulo',
-    },
-    timezone: 'America/Sao_Paulo',
 });
 
 export default sequelizeConnection;

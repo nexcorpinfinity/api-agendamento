@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 
 module.exports = {
     async up(queryInterface, Sequelize) {
-        const comercio = await queryInterface.sequelize.query(`SELECT id FROM "tb_comercio" WHERE cpf_cpnj IN ('123.123.123-00');`, { type: Sequelize.QueryTypes.SELECT });
+        const comercio = await queryInterface.sequelize.query(`SELECT id FROM tb_comercio WHERE cpf_cpnj IN ('123.123.123-00');`, { type: Sequelize.QueryTypes.SELECT });
 
         return queryInterface.bulkInsert(
             'tb_produtos',
