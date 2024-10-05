@@ -1,14 +1,16 @@
 services:
-    database:
-        container_name: saas_teste
-        hostname: saas_teste_database
-        image: postgres:latest
-        restart: always
-        environment:
-            POSTGRES_USER: root
-            POSTGRES_PASSWORD: root
-            POSTGRES_DB: saas_teste
-        ports:
-            - '5432:5432'
-        volumes:
-            - ~/saas_teste:/var/lib/postgresql/data
+  database:
+    container_name: saas__mysql
+    hostname: saas__database
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: saas-commerce
+      MYSQL_USER: saascomerce
+      MYSQL_PASSWORD: root
+      TZ: America/Sao_Paulo
+    ports:
+      - '3306:3306'
+    volumes:
+      - ~/saas_mysql:/var/lib/mysql
