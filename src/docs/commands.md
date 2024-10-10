@@ -42,3 +42,6 @@ docker volume rm $(docker volume ls -q)
 
 # Docker remover tudo junto
 docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker rmi $(docker images -q) && docker volume rm $(docker volume ls -q)
+
+# Docker adicionar usuário sem sudo
+sudo usermod -aG docker $USER
