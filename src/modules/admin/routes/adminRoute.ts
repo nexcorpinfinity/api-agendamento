@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import AdminController from '../controllers/AdminController';
-import AuthLoginRequired from '../../middleware/AuthLoginRequired';
-import { authenticateToken } from '../../middleware/AuthPermission';
-import { Role } from '../../modules/users/Permissions';
+import AuthLoginRequired from '../../../middleware/AuthLoginRequired';
+import { authenticateToken } from '../../../middleware/AuthPermission';
+import { Role } from '../../../types/Enums';
 
 const adminRoute: Router = Router();
 

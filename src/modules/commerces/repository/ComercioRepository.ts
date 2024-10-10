@@ -1,5 +1,5 @@
+import { Role } from '../../../types/Enums';
 import { User } from '../../users/entities/User';
-import { Role } from '../../users/Permissions';
 
 import { Comercio } from '../entities/Commerce';
 

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { receberIdPeloToken } from '../../utils/DecodeToken';
-import AuthService from '../../modules/auth/services/AuthService';
+import { receberIdPeloToken } from '../../../utils/DecodeToken';
+import AuthService from '../../auth/services/AuthService';
 
 class AdminController {
     private authService: AuthService;

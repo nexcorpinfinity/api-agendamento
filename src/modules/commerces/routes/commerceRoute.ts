@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { authenticateToken } from '../../../middleware/AuthPermission';
 import AuthLoginRequired from '../../../middleware/AuthLoginRequired';
-import { Role } from '../../users/Permissions';
 import CommerceController from '../controllers/CommerceController';
 import ProductsController from '../controllers/ProductsController';
+import { Role } from '../../../types/Enums';
 
 const commerceRoute = Router();
 
