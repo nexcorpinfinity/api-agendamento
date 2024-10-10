@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ErrorException } from '../../../utils/ErrorException';
 
-import { Role } from '../Permissions';
 import validator from 'validator';
 import { IUser } from '../interfaces/IUser';
 import { UserRepository } from '../repository/UserRepository';
+import { Role } from '../../../types/Enums';
 
 type ErrorsProtocol = {
     message: string;

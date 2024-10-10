@@ -27,4 +27,4 @@ const sequelizeConnection = new Sequelize(dbName, dbUser, dbPassword, {
     },
 });
 
-export default sequelizeConnection;
+export { sequelizeConnection };

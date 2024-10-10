@@ -2,7 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 
 import bcrypt from 'bcrypt';
 import { IUser } from '../interfaces/IUser';
-import sequelizeConnection from '../../../config/database';
+import { sequelizeConnection } from '../../../config/db/database';
 
 class User extends Model<IUser> {
     static isValidPassword: (password: string, hash: string) => boolean;
