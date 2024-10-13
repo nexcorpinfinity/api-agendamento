@@ -16,7 +16,7 @@ User.init(
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
-        first_name: {
+        name: {
             type: DataTypes.STRING(128),
             allowNull: false,
         },
@@ -28,6 +28,11 @@ User.init(
             type: DataTypes.STRING(128),
             allowNull: false,
         },
+        // email_verified: {
+        //     type: DataTypes.BOOLEAN,
+        //     defaultValue: false,
+        //     allowNull: false,
+        // },
         password: {
             type: DataTypes.STRING(128),
             allowNull: false,
@@ -36,14 +41,34 @@ User.init(
                 this.setDataValue('password', hash);
             },
         },
-        roles: {
-            type: DataTypes.STRING(10),
-            defaultValue: 'user',
+        documents: {
+            type: DataTypes.STRING(128),
+            allowNull: true,
+        },
+        photo: {
+            type: DataTypes.STRING(128),
+            allowNull: true,
+        },
+        active: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true,
             allowNull: false,
         },
+        last_login: {
+            type: DataTypes.DATE,
+            allowNull: true,
+        },
+        data_nasc: {
+            type: DataTypes.DATE,
+            allowNull: true,
+        },
+        // api_key: {
+        //     type: DataTypes.STRING(128),
+        //     allowNull: false,
+        // },
     },
     {
-        tableName: 'tb_users',
+        tableName: 'users',
         sequelize: sequelizeConnection,
         underscored: true,
     },

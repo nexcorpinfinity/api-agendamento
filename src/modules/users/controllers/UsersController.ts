@@ -1,30 +1,31 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
-import UserService from '../services/UserService';
+import IUserService from '../services/UserService';
+import { BodyReceived } from '../interfaces/IUser';
+import { Logger } from '../../../utils/Logger';
 import { ErrorException } from '../../../utils/ErrorException';
-import { IUser } from '../interfaces/IUser';
+// import { IUser } from '../interfaces/IUser';
 
-type BodyReceived = {
-    first_name: string;
-    last_name: string;
-    email: string;
-    password: string;
-};
-class UserController {
-    private userService: UserService;
+interface IUserController {
+    createUserWithBunisess(req: Request, res: Response): Promise<void>;
+}
 
-    constructor() {
-        this.userService = new UserService();
-        this.createUserNormal = this.createUserNormal.bind(this);
+export class UserController extends Logger implements IUserController {
+    private readonly userService: IUserService;
+
+    constructor(userService: IUserService) {
+        super();
+        this.userService = userService;
     }
 
-    async createUserNormal(req: Request, res: Response) {
-        const { first_name, last_name, email, password }: BodyReceived = req.body;
+    async createUserWithBunisess(req: Request, res: Response): Promise<void> {
+        // desestruturação de obj
+        const { name, last_name, name_business, email, password }: BodyReceived = req.body;
 
-        const obj: IUser = { first_name, last_name, email, password };
+        const createUser = { name, last_name, name_business, email, password };
 
         try {
-            const user = await this.userService.createUserNormal(obj);
+            const user = await this.userService.createUserNormal(createUser);
 
             console.log(user);
 
@@ -49,37 +50,35 @@ class UserController {
         }
     }
 
-    async createUserAdmin(req: Request, res: Response) {
-        const { first_name, last_name, email, password }: BodyReceived = req.body;
+    // async createUserAdmin(req: Request, res: Response) {
+    //     const { first_name, last_name, email, password }: BodyReceived = req.body;
 
-        if (!first_name || !last_name || !email || !password) {
-            return res.status(400).json({ status: 400, error: 'Todos os campos são obrigatórios' });
-        }
+    //     if (!first_name || !last_name || !email || !password) {
+    //         return res.status(400).json({ status: 400, error: 'Todos os campos são obrigatórios' });
+    //     }
 
-        const obj: IUser = { first_name, last_name, email, password };
+    //     const obj: IUser = { first_name, last_name, email, password };
 
-        try {
-            const user = await this.userService.createUserAdminGlobal(obj);
+    //     try {
+    //         const user = await this.userService.createUserAdminGlobal(obj);
 
-            res.status(201).json({
-                status: 201,
-                response: user,
-            });
-        } catch (error: any) {
-            console.error(error);
-            if (error instanceof ErrorException) {
-                res.status(error.statusCode).json({
-                    status: error.statusCode,
-                    error: error.errors,
-                });
-            } else {
-                res.status(500).json({
-                    status: 500,
-                    error: 'Internal Server Error',
-                });
-            }
-        }
-    }
+    //         res.status(201).json({
+    //             status: 201,
+    //             response: user,
+    //         });
+    //     } catch (error: any) {
+    //         console.error(error);
+    //         if (error instanceof ErrorException) {
+    //             res.status(error.statusCode).json({
+    //                 status: error.statusCode,
+    //                 error: error.errors,
+    //             });
+    //         } else {
+    //             res.status(500).json({
+    //                 status: 500,
+    //                 error: 'Internal Server Error',
+    //             });
+    //         }
+    //     }
+    // }
 }
-
-export default new UserController();

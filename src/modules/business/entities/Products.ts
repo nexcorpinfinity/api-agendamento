@@ -1,46 +1,47 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelizeConnection } from '../../../config/db/database';
-import { User } from '../../users/entities/User';
+import { Business } from './Business';
 
-class Comercio extends Model {}
+class Produto extends Model {}
 
-Comercio.init(
+Produto.init(
     {
         id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
-        comercio_name: {
+        product_name: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        cpf_cpnj: {
-            type: DataTypes.STRING,
+        price: {
+            type: DataTypes.FLOAT,
             allowNull: false,
         },
-        endereco: {
-            type: DataTypes.STRING,
+        quantidade: {
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
-        usuario_id: {
+        comercio_id: {
             type: DataTypes.UUID,
-            allowNull: true,
             references: {
-                model: 'tb_users',
+                model: 'tb_comercio',
                 key: 'id',
             },
-            unique: true,
+            allowNull: false,
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
         },
     },
     {
-        tableName: 'tb_comercio',
+        tableName: 'tb_produtos',
         sequelize: sequelizeConnection,
         underscored: true,
     },
 );
 
-User.hasOne(Comercio, { foreignKey: 'usuario_id', onDelete: 'SET NULL', onUpdate: 'CASCADE' });
-Comercio.belongsTo(User, { foreignKey: 'usuario_id' });
+Business.hasMany(Produto, { foreignKey: 'comercio_id', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+Produto.belongsTo(Business, { foreignKey: 'comercio_id' });
 
-export { Comercio };
+export { Produto };

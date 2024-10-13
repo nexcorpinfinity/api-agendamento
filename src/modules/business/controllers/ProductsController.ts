@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import AuthService from '../../auth/services/AuthService';
 
-import { Comercio } from '../entities/Commerce';
+import { Business } from '../entities/Business';
 import { Produto } from '../entities/Products';
 
 interface Produtos {
@@ -27,7 +27,7 @@ class ProductsController {
 
         console.log(userLogged?.id);
 
-        const buscarRestaurante = await Comercio.findOne({
+        const buscarRestaurante = await Business.findOne({
             where: { usuario_id: userLogged?.id },
         });
 
@@ -55,7 +55,7 @@ class ProductsController {
 
             console.log(userLogged.id);
 
-            const buscarRestaurante = await Comercio.findOne({
+            const buscarRestaurante = await Business.findOne({
                 where: { usuario_id: userLogged.id },
             });
 
@@ -109,7 +109,7 @@ class ProductsController {
                 return res.status(400).json({ error: 'Preencha todos os campos' });
             }
 
-            const buscarRestaurante = await Comercio.findOne({
+            const buscarRestaurante = await Business.findOne({
                 where: { usuario_id: userLogged.id },
             });
 
@@ -154,7 +154,7 @@ class ProductsController {
 
             const produtoParam = req.params.id;
 
-            const buscarRestaurante = await Comercio.findOne({
+            const buscarRestaurante = await Business.findOne({
                 where: { usuario_id: userLogged.id },
             });
 

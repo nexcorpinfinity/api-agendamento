@@ -4,7 +4,7 @@ import { receberIdPeloToken } from '../../../utils/DecodeToken';
 import { ComercioBodyProps } from '../interface/BodyRequest';
 import ComercioService from '../services/ComercioService';
 
-import { Comercio } from '../entities/Commerce';
+import { Business } from '../entities/Business';
 import { User } from '../../users/entities/User';
 import { Produto } from '../entities/Products';
 
@@ -46,7 +46,7 @@ class CommerceController {
 
         const user = await User.findByPk(userLogged?.id, {
             include: {
-                model: Comercio,
+                model: Business,
                 include: [Produto],
             },
         });
@@ -63,7 +63,7 @@ class CommerceController {
             password: undefined,
             roles: undefined,
             Comercio: {
-                ...userJson.Comercio,
+                // ...userJson.Comercio,
                 cpf_cpnj: undefined,
                 usuario_id: undefined,
             },

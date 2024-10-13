@@ -43,9 +43,9 @@ export default class AuthService {
         }
 
         const idUser: number | undefined = user.id;
-        const nomeDoUsuario: string | undefined = user.first_name;
+        const nomeDoUsuario: string | undefined = user.name;
         // const emailDoUsuario: string | undefined = user.email;
-        const permission: string | undefined = user.roles;
+        // const permission: string | undefined = user.roles;
         const senhaHash: string | undefined = user.password;
 
         const passwordIsValid = User.isValidPassword(password, senhaHash);
@@ -58,7 +58,7 @@ export default class AuthService {
             throw new ErrorException(errors, 400);
         }
 
-        const token = jwt.sign({ idUser, nomeDoUsuario, permission }, process.env.TOKEN_SECRET as string, {
+        const token = jwt.sign({ idUser, nomeDoUsuario }, process.env.TOKEN_SECRET as string, {
             expiresIn: process.env.TOKEN_EXPIRATION,
         });
 
