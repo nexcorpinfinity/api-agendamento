@@ -5,9 +5,9 @@ import { User } from '../entities/User';
 export class UserRepository {
     constructor(private readonly user = User) {}
 
-    async createUserNormal(nameReceived: string, last_nameReceived: string, emailReceived: string, passwordReceived: string) {
+    async createUserNormal(nameReceived: string, last_nameReceived: string, emailReceived: string, passwordReceived: string, permissionReceived: string) {
         try {
-            const usuarioRecebido: any = { name: nameReceived, last_name: last_nameReceived, email: emailReceived, password: passwordReceived };
+            const usuarioRecebido: any = { name: nameReceived, last_name: last_nameReceived, email: emailReceived, password: passwordReceived, permission: permissionReceived };
 
             // if ((await this.validaEmailNoBanco(usuarioRecebido.email)) === true) return 'Email ja existe';
 
@@ -22,22 +22,22 @@ export class UserRepository {
         }
     }
 
-    // async createUserAdminG(name: string, last_name: string, email: string, password: string) {
-    //     try {
-    //         const usuarioRecebido: any = { name, last_name, email, password };
+    async createUserAdminG(nameReceived: string, last_nameReceived: string, emailReceived: string, passwordReceived: string, permissionReceived: string) {
+        try {
+            const usuarioRecebido: any = { nameReceived, last_nameReceived, emailReceived, passwordReceived, permissionReceived };
 
-    //         console.log(usuarioRecebido);
+            console.log(usuarioRecebido);
 
-    //         this.validaEmailNoBanco(usuarioRecebido.email);
+            this.validaEmailNoBanco(usuarioRecebido.email);
 
-    //         await this.user.create(usuarioRecebido);
+            await this.user.create(usuarioRecebido);
 
-    //         return { mensagem: 'Admin created', userCreated: { name, email } };
-    //     } catch (error) {
-    //         // console.log(error);
-    //         throw new Error(`Não foi possivel fazer o cadastro do Usuário: ${error}`);
-    //     }
-    // }
+            return { mensagem: 'Admin created', userCreated: { nameReceived, last_nameReceived, emailReceived, passwordReceived } };
+        } catch (error) {
+            // console.log(error);
+            throw new Error(`Não foi possivel fazer o cadastro do Usuário: ${error}`);
+        }
+    }
 
     async validaEmailNoBanco(emailParam: string) {
         const user = await this.user.findOne({
@@ -61,9 +61,9 @@ export class UserRepository {
 
             const data = user.dataValues;
 
-            const { id, name, email, password } = data;
+            const { id, name, email, password, permission } = data;
 
-            return { id, name, email, password };
+            return { id, name, email, password, permission };
         } catch (error) {
             throw new Error(`Unable to find user: ${error}`);
         }

@@ -2,6 +2,19 @@ import { Model, DataTypes } from 'sequelize';
 import { sequelizeConnection } from '../../../config/db/database';
 import { User } from '../../users/entities/User';
 
+export interface IBusiness {
+    id: string;
+    name: string;
+    // cpnj: string;
+    address: string;
+    city: string;
+    state: string;
+    cep: string;
+    photo: string;
+    telefone: string;
+    user_id: string;
+}
+
 class Business extends Model {}
 
 // verificar as validacões da criacao dessa tabela na migration
@@ -48,7 +61,7 @@ Business.init(
             type: DataTypes.UUID,
             allowNull: true,
             references: {
-                model: 'tb_users',
+                model: 'users',
                 key: 'id',
             },
             unique: true,
@@ -61,7 +74,7 @@ Business.init(
     },
 );
 
-User.hasOne(Business, { foreignKey: 'usuario_id', onDelete: 'SET NULL', onUpdate: 'CASCADE' });
-Business.belongsTo(User, { foreignKey: 'usuario_id' });
+User.hasOne(Business, { foreignKey: 'user_id', onDelete: 'SET NULL', onUpdate: 'CASCADE' });
+Business.belongsTo(User, { foreignKey: 'user_id' });
 
 export { Business };

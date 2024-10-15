@@ -3,6 +3,7 @@ import { Model, DataTypes } from 'sequelize';
 import bcrypt from 'bcrypt';
 import { IUser } from '../interfaces/IUser';
 import { sequelizeConnection } from '../../../config/db/database';
+import { Role } from '../../../types/Enums';
 
 class User extends Model<IUser> {
     static isValidPassword: (password: string, hash: string) => boolean;
@@ -61,6 +62,11 @@ User.init(
         data_nasc: {
             type: DataTypes.DATE,
             allowNull: true,
+        },
+        permission: {
+            type: DataTypes.STRING(10),
+            defaultValue: Role.Costumer,
+            allowNull: false,
         },
         // api_key: {
         //     type: DataTypes.STRING(128),

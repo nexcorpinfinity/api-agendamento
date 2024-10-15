@@ -23,31 +23,34 @@ class ProductsController {
     }
 
     async cadastrarProdutos(req: Request, res: Response) {
-        const userLogged = this.authService.usuarioAutenticado(req);
+        // const userLogged = this.authService.usuarioAutenticado(req);
 
-        console.log(userLogged?.id);
+        // console.log(userLogged?.id);
 
-        const buscarRestaurante = await Business.findOne({
-            where: { usuario_id: userLogged?.id },
-        });
+        // const buscarRestaurante = await Business.findOne({
+        //     where: { usuario_id: userLogged?.id },
+        // });
 
-        const idRestaurante = buscarRestaurante?.dataValues.id;
+        // const idRestaurante = buscarRestaurante?.dataValues.id;
 
-        const { product_name, price, quantidade } = req.body;
+        // const { product_name, price, quantidade } = req.body;
 
-        const produto = await Produto.create({
-            product_name,
-            price,
-            quantidade,
-            comercio_id: idRestaurante,
-        });
+        // const produto = await Produto.create({
+        //     product_name,
+        //     price,
+        //     quantidade,
+        //     comercio_id: idRestaurante,
+        // });
 
-        res.json({ produto });
+        // res.json({ produto });
+        res.json('falta editar a criacao do produto');
     }
 
     async trazerProdutosDoCostumer(req: Request, res: Response) {
         try {
             const userLogged = this.authService.usuarioAutenticado(req);
+
+            console.log('res.locals.user', res.locals.user);
 
             if (!userLogged) {
                 return res.status(401).json({ error: 'Usuário não autenticado' });
@@ -56,7 +59,7 @@ class ProductsController {
             console.log(userLogged.id);
 
             const buscarRestaurante = await Business.findOne({
-                where: { usuario_id: userLogged.id },
+                where: { user_id: userLogged.id },
             });
 
             if (!buscarRestaurante) {
@@ -66,7 +69,7 @@ class ProductsController {
             const idRestaurante = buscarRestaurante.dataValues?.id;
             console.log(idRestaurante);
 
-            const produtos = await Produto.findAll({ where: { comercio_id: idRestaurante } });
+            const produtos = await Produto.findAll({ where: { business_id: idRestaurante } });
 
             res.json({ todosProdutos: produtos });
         } catch (error) {

@@ -71,6 +71,10 @@ module.exports = {
                 type: Sequelize.DATE,
                 allowNull: true,
             },
+            permission: {
+                type: Sequelize.STRING(10),
+                allowNull: false,
+            },
             // planos_id: {
             //     // Chave estrangeira para a tabela de planos
             //     type: Sequelize.INTEGER,

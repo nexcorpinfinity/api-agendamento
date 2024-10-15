@@ -1,4 +1,6 @@
 export interface IUser {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Business?: any;
     id?: number;
     name: string;
     last_name: string;
@@ -12,6 +14,7 @@ export interface IUser {
 
     last_login: Date;
     data_nasc: Date;
+    permission: string;
     api_key?: string;
 
     createdAt?: Date;
