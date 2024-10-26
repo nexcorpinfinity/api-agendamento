@@ -1,23 +1,10 @@
 import { Model, DataTypes } from 'sequelize';
-import { sequelizeConnection } from '../../../config/db/database';
-import { User } from '../../users/entities/UserEntity';
 
-export interface IBusiness {
-    id: string;
-    name: string;
-    // cpnj: string;
-    address: string;
-    city: string;
-    state: string;
-    cep: string;
-    photo: string;
-    telefone: string;
-    user_id: string;
-}
+import { sequelizeConnection } from '../../../config/db/database';
+import { UserEntity } from '../../users/entities/UserEntity';
 
 class Business extends Model {}
 
-// verificar as validacões da criacao dessa tabela na migration
 Business.init(
     {
         id: {
@@ -29,10 +16,14 @@ Business.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        // cpnj: {
-        //     type: DataTypes.STRING,
-        //     allowNull: false,
-        // },
+        documents: {
+            type: DataTypes.STRING(18),
+            allowNull: true,
+            unique: true,
+            validate: {
+                is: /(^\d{3}\.\d{3}\.\d{3}-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$)/,
+            },
+        },
         address: {
             type: DataTypes.STRING,
             allowNull: true,
@@ -48,12 +39,11 @@ Business.init(
         cep: {
             type: DataTypes.STRING,
             allowNull: true,
+            validate: {
+                is: /^\d{5}-\d{3}$/,
+            },
         },
         photo: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        telefone: {
             type: DataTypes.STRING,
             allowNull: true,
         },
@@ -74,7 +64,11 @@ Business.init(
     },
 );
 
-User.hasOne(Business, { foreignKey: 'user_id', onDelete: 'SET NULL', onUpdate: 'CASCADE' });
-Business.belongsTo(User, { foreignKey: 'user_id' });
+UserEntity.hasOne(Business, {
+    foreignKey: 'user_id',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE',
+});
+Business.belongsTo(UserEntity, { foreignKey: 'user_id' });
 
 export { Business };
