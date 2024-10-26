@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 export class CorsConfig {
     private whitelist: string[];
 
-    constructor(whitelist: string[]) {
+    public constructor(whitelist: string[]) {
         this.whitelist = whitelist;
     }
 

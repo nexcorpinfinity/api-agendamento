@@ -10,8 +10,10 @@ export default class ComercioService {
         this.commerceRepository = new BusinessRepository();
     }
 
-    async criarComercio(userData: ComercioBodyProps) {
-        if (userData.client_id === undefined) return 'retornou undefined';
+    async criarComercio(userData: ComercioBodyProps): Promise<any> {
+        if (userData.client_id === undefined) {
+            return 'retornou undefined';
+        }
 
         const user = await this.commerceRepository.createCommerce(userData.comercio_name, userData.cpf_cnpj, userData.endereco, userData.client_id);
 

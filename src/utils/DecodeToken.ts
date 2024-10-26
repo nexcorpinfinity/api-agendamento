@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+
 interface DecodedToken {
     id: string;
     nomeDoUsuario: string;
@@ -30,7 +31,9 @@ export const receberIdPeloToken = (authHeader: string): IdAndPermission | null |
 
     const decodedToken = decodeToken(token);
 
-    if (decodedToken === undefined || decodedToken === null) return;
+    if (decodedToken === undefined || decodedToken === null) {
+        return;
+    }
 
     const objIdAndPermission: IdAndPermission | null = {
         id: decodedToken.id,

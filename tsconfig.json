@@ -13,8 +13,22 @@
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true,
+        "alwaysStrict": true,
+        "strictFunctionTypes": true,
+        "strictBindCallApply": true,
+        "strictPropertyInitialization": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": false,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true
     },
     "include": [
-        "src"
+        "src",
     ],
+    "exclude": [
+        "ExemploTestesComClasses",
+    ]
 }

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+// acesso ao banco pro sequelize rodar as migrations e seeders
 require('dotenv').config();
 
 module.exports = {

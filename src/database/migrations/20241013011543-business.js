@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 module.exports = {
     async up(queryInterface, Sequelize) {
         await queryInterface.createTable('business', {
@@ -11,11 +12,14 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            // cnpj: {
-            //     type: Sequelize.STRING(14),
-            //     allowNull: true,
-            //     unique: true,
-            // },
+            documents: {
+                type: Sequelize.STRING(18),
+                allowNull: true,
+                unique: true,
+                validate: {
+                    is: /(^\d{3}\.\d{3}\.\d{3}-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$)/, // Valida CPF e CNPJ
+                },
+            },
             address: {
                 type: Sequelize.STRING(60),
                 allowNull: true,
@@ -29,16 +33,22 @@ module.exports = {
                 allowNull: true,
             },
             cep: {
-                type: Sequelize.STRING(8),
+                type: Sequelize.STRING(9),
                 allowNull: true,
+                validate: {
+                    is: /^\d{5}-\d{3}$/,
+                },
             },
             photo: {
                 type: Sequelize.STRING,
                 allowNull: true,
             },
             telefone: {
-                type: Sequelize.STRING(14),
+                type: Sequelize.STRING(15),
                 allowNull: true,
+                validate: {
+                    is: /^\+\d{2}\s\(\d{2}\)\s\d{4,5}-\d{4}$/, // Validação de formato de telefone
+                },
             },
             user_id: {
                 type: Sequelize.UUID,
@@ -46,7 +56,6 @@ module.exports = {
                     model: 'users',
                     key: 'id',
                 },
-                unique: true,
                 allowNull: true,
                 onUpdate: 'CASCADE',
                 onDelete: 'SET NULL',
@@ -54,10 +63,12 @@ module.exports = {
             created_at: {
                 type: Sequelize.DATE,
                 allowNull: false,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
             updated_at: {
                 type: Sequelize.DATE,
                 allowNull: false,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
             },
         });
     },

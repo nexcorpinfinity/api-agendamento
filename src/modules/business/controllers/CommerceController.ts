@@ -1,30 +1,29 @@
 import { Request, Response } from 'express';
+
 import AuthService from '../../auth/services/AuthService';
 // import { receberIdPeloToken } from '../../../utils/DecodeToken';
 // import { ComercioBodyProps } from '../interface/BodyRequest';
-import ComercioService from '../services/ComercioService';
 
+import { UserEntity } from '../../users/entities/UserEntity';
 import { Business } from '../entities/Business';
-import { User } from '../../users/entities/User';
 // import { Produto } from '../entities/Products';
 
 class CommerceController {
     protected authService: AuthService;
-    private comercioService: ComercioService;
 
-    constructor() {
+    public constructor() {
         this.authService = new AuthService();
-        this.comercioService = new ComercioService();
         this.index = this.index.bind(this);
         this.trazerDadosDoUsuarioCompleto = this.trazerDadosDoUsuarioCompleto.bind(this);
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     public async trazerDadosDoUsuarioCompleto(req: Request, res: Response) {
         const userLogged = this.authService.usuarioAutenticado(req);
 
         console.log(userLogged);
 
-        const user = await User.findByPk(userLogged?.id, {
+        const user = await UserEntity.findByPk(userLogged?.id, {
             include: {
                 model: Business,
             },
@@ -49,10 +48,10 @@ class CommerceController {
             },
         };
 
-        res.json(userRetorned);
+        return res.json(userRetorned);
     }
 
-    index(req: Request, res: Response) {
+    public index(req: Request, res: Response) {
         const userLogged = this.authService.usuarioAutenticado(req);
 
         /* obtem o id e a permissao, valida a permissao e deixa passasr para validar o resto no service aqui verifica a permissao de costumer e admin pode ter acesso a essa rota */

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 module.exports = {
     async up(queryInterface, Sequelize) {
         await queryInterface.createTable('plans', {
@@ -22,19 +23,25 @@ module.exports = {
                     isDecimal: true,
                 },
             },
-            // falta o tipo se é mensal, trimestal, semestral, anual
             duration_time: {
-                // dias ou meses ?
                 type: Sequelize.INTEGER(3),
                 allowNull: false,
+                comment: 'Duração do plano em dias',
+            },
+            duration_type: {
+                type: Sequelize.ENUM('DIAS', 'MESES'),
+                allowNull: false,
+                comment: 'Unidade de tempo da duração do plano',
             },
             created_at: {
                 type: Sequelize.DATE,
                 allowNull: false,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
             updated_at: {
                 type: Sequelize.DATE,
                 allowNull: false,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
             },
         });
     },

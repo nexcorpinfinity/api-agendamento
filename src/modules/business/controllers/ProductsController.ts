@@ -72,10 +72,10 @@ class ProductsController {
 
             const produtos = await Products.findAll({ where: { business_id: idRestaurante } });
 
-            res.json({ todosProdutos: produtos });
+            return res.json({ todosProdutos: produtos });
         } catch (error) {
             console.error('Erro ao trazer produtos do cliente:', error);
-            res.status(500).json({ error: 'Erro interno do servidor' });
+            return res.status(500).json({ error: 'Erro interno do servidor' });
         }
     }
 
@@ -90,7 +90,7 @@ class ProductsController {
 
         console.log(produtos);
 
-        res.json(produtos);
+        return res.json(produtos);
     }
 
     async atualizarProduto(req: Request, res: Response) {

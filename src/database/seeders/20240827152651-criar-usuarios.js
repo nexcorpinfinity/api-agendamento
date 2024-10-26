@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-var-requires */
 'use strict';
 
-const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcrypt');
+const { v4: uuidv4 } = require('uuid');
 
 module.exports = {
     async up(queryInterface) {
@@ -29,7 +30,6 @@ module.exports = {
                     cnpj: null,
                     photo: 'https://example.com/photos/asdasdad.jpg',
                     active: true,
-                    number_phone: '+5511999999999',
                     last_login: new Date(),
                     email_verified: true,
                     data_nasc: new Date('1990-05-15'),

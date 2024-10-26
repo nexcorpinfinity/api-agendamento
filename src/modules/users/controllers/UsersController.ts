@@ -1,83 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
-import IUserService from '../services/UserService';
-import { BodyReceived } from '../interfaces/IUser';
-import { Logger } from '../../../utils/Logger';
-import { ErrorException } from '../../../utils/ErrorException';
 
-interface IUserController {
-    createUserWithBunisess(req: Request, res: Response): Promise<void>;
-}
+import { IUserController } from '../interfaces/IUserController';
+import { IUserService } from '../interfaces/IUserService';
 
-export class UserController extends Logger implements IUserController {
-    private readonly userService: IUserService;
+export class UserController implements IUserController {
+    public constructor(private readonly userService: IUserService) {}
 
-    constructor(userService: IUserService) {
-        super();
-        this.userService = userService;
+    public createAdminUser(req: Request, res: Response): void {
+        const a = req.body;
+        this.userService;
+        console.log(a);
+        res.json('ok');
     }
-
-    async createUserWithBunisess(req: Request, res: Response): Promise<void> {
-        // desestruturação de obj
-        const { name, last_name, name_business, email, password }: BodyReceived = req.body;
-
-        const createUser = { name, last_name, name_business, email, password };
-
-        try {
-            const user = await this.userService.createUserNormal(createUser);
-
-            console.log(user);
-
-            // controler > service > repository < model
-            res.status(201).json({
-                status: 201,
-                response: user,
-            });
-        } catch (error: any) {
-            console.error(error);
-            if (error instanceof ErrorException) {
-                res.status(error.statusCode).json({
-                    status: error.statusCode,
-                    error: error.errors,
-                });
-            } else {
-                res.status(500).json({
-                    status: 500,
-                    error: 'Internal Server Error',
-                });
-            }
-        }
+    public createBusinessUser(req: Request, res: Response): void {
+        const a = req.body;
+        console.log(a);
+        res.json('ok');
     }
-
-    async createUserAdmin(req: Request, res: Response) {
-        const { name, last_name, email, password }: BodyReceived = req.body;
-
-        if (!name || !last_name || !email || !password) {
-            return res.status(400).json({ status: 400, error: 'Todos os campos são obrigatórios' });
-        }
-
-        const obj = { name, last_name, email, password };
-
-        try {
-            const user = await this.userService.createUserAdminGlobal(obj);
-
-            res.status(201).json({
-                status: 201,
-                response: user,
-            });
-        } catch (error: any) {
-            console.error(error);
-            if (error instanceof ErrorException) {
-                res.status(error.statusCode).json({
-                    status: error.statusCode,
-                    error: error.errors,
-                });
-            } else {
-                res.status(500).json({
-                    status: 500,
-                    error: 'Internal Server Error',
-                });
-            }
-        }
+    public createClientUser(req: Request, res: Response): void {
+        const a = req.body;
+        console.log(a);
+        res.json('ok');
     }
 }

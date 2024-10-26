@@ -1,95 +1,96 @@
-import { ErrorException } from '../../../utils/ErrorException';
-import jwt from 'jsonwebtoken';
-import { Request } from 'express';
-import { receberIdPeloToken } from '../../../utils/DecodeToken';
-import { User } from '../../users/entities/User';
-import { UserRepository } from '../../users/repository/UserRepository';
+// import { Request } from 'express';
+// import jwt from 'jsonwebtoken';
 
-interface UserLogged {
-    id: string;
-    permission: string[];
-}
-export default class AuthService {
-    private userRepository: UserRepository;
+// import { receberIdPeloToken } from '../../../utils/DecodeToken';
+// import { ErrorException } from '../../../utils/ErrorException';
+// // import { UserEntity } from '../../users/entities/UserEntity';
+// // import { UserRepository } from '../../users/repository/UserRepository';
 
-    constructor() {
-        this.userRepository = new UserRepository();
-    }
+// interface UserLogged {
+//     id: string;
+//     permission: string[];
+// }
+// export default class AuthService {
+//     private userRepository: UserRepository;
 
-    async autenticarUsuario(emailReceived: string, passwordReceived: string) {
-        const errors = [];
+//     public constructor() {
+//         this.userRepository = new UserRepository();
+//     }
 
-        if (!emailReceived || !passwordReceived) {
-            errors.push({ message: 'Campo Login e senha não informado', campo: 'Todos' });
-        }
+//     public async autenticarUsuario(emailReceived: string, passwordReceived: string) {
+//         const errors = [];
 
-        //importar o validator para verificar o email
-        // if (email) {
-        //     errors.push({ message: 'Email invalido', campo: 'email' });
-        // }
+//         if (!emailReceived || !passwordReceived) {
+//             errors.push({ message: 'Campo Login e senha não informado', campo: 'Todos' });
+//         }
 
-        // if (password.length <= 6) {
-        //     errors.push({ message: 'Campo senha não pode ser menor que 6 caracteres', campo: 'password' });
-        // }
+//         //importar o validator para verificar o email
+//         // if (email) {
+//         //     errors.push({ message: 'Email invalido', campo: 'email' });
+//         // }
 
-        // faz uma consulta no banco com o email informado
-        const user = await this.userRepository.findByEmailAuth(emailReceived);
+//         // if (password.length <= 6) {
+//         //     errors.push({ message: 'Campo senha não pode ser menor que 6 caracteres', campo: 'password' });
+//         // }
 
-        console.log('olha ele ai', user);
+//         // faz uma consulta no banco com o email informado
+//         const user = await this.userRepository.findByEmailAuth(emailReceived);
 
-        if (!user) {
-            errors.push({ message: 'Usuario não existente', campo: 'email' });
-            throw new ErrorException(errors, 400);
-        }
+//         console.log('olha ele ai', user);
 
-        const id: number | undefined = user.id;
-        const name: string | undefined = user.name;
-        const email: string | undefined = user.email;
-        const permission: string | undefined = user.permission;
+//         if (!user) {
+//             errors.push({ message: 'Usuario não existente', campo: 'email' });
+//             throw new ErrorException(errors, 400);
+//         }
 
-        const senhaHash: string | undefined = user.password;
+//         const id: number | undefined = user.id;
+//         const name: string | undefined = user.name;
+//         const email: string | undefined = user.email;
+//         const permission: string | undefined = user.permission;
 
-        const passwordIsValid = User.isValidPassword(passwordReceived, senhaHash);
+//         // const senhaHash: string | undefined = user.password;
 
-        if (passwordIsValid !== true) {
-            errors.push({ message: 'Senha invalida', campo: 'password' });
-        }
+//         // const passwordIsValid = UserEntity.isValidPassword(passwordReceived, senhaHash);
 
-        if (errors.length > 0) {
-            throw new ErrorException(errors, 400);
-        }
+//         // if (passwordIsValid !== true) {
+//         //     errors.push({ message: 'Senha invalida', campo: 'password' });
+//         // }
 
-        const token = jwt.sign({ id, name, email, permission }, process.env.TOKEN_SECRET as string, {
-            expiresIn: process.env.TOKEN_EXPIRATION,
-        });
+//         if (errors.length > 0) {
+//             throw new ErrorException(errors, 400);
+//         }
 
-        console.log(token);
+//         const token = jwt.sign({ id, name, email, permission }, process.env.TOKEN_SECRET as string, {
+//             expiresIn: process.env.TOKEN_EXPIRATION,
+//         });
 
-        return { token };
-    }
+//         console.log(token);
 
-    usuarioAutenticado(req: Request): UserLogged | undefined {
-        const authHeader = req.headers.authorization;
+//         return { token };
+//     }
 
-        console.log(authHeader);
+//     public usuarioAutenticado(req: Request): UserLogged | undefined {
+//         const authHeader = req.headers.authorization;
 
-        if (!authHeader) {
-            console.error('O token é undefined');
-            return undefined;
-        }
-        const token = authHeader.split(' ')[1];
+//         console.log(authHeader);
 
-        console.log(token);
+//         if (!authHeader) {
+//             console.error('O token é undefined');
+//             return undefined;
+//         }
+//         const token = authHeader.split(' ')[1];
 
-        const userLogged = receberIdPeloToken(token);
+//         console.log(token);
 
-        console.log(userLogged);
+//         const userLogged = receberIdPeloToken(token);
 
-        if (!userLogged) {
-            console.error('Falha ao decodificar o token');
-            return undefined;
-        }
+//         console.log(userLogged);
 
-        return userLogged;
-    }
-}
+//         if (!userLogged) {
+//             console.error('Falha ao decodificar o token');
+//             return undefined;
+//         }
+
+//         return userLogged;
+//     }
+// }

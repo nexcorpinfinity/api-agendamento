@@ -1,46 +1,44 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Request, Response } from 'express';
-import AuthService from '../services/AuthService';
-import { ErrorException } from '../../../utils/ErrorException';
+// /* eslint-disable @typescript-eslint/no-explicit-any */
+// import { Request, Response } from 'express';
 
-class AuthController {
-    private readonly authService: AuthService;
+// import { ErrorException } from '../../../utils/ErrorException';
+// // import AuthService from '../services/AuthService';
 
-    constructor() {
-        this.authService = new AuthService();
-        this.auth = this.auth.bind(this);
-    }
+// export class AuthController {
+//     // private readonly authService: AuthService;
 
-    async auth(req: Request, res: Response): Promise<Response> {
-        const { email, password } = req.body;
-        console.log(req.body);
-        if (!email || !password) {
-            return res.status(401).json({ status: 400, errors: 'Credenciais inválidas' });
-        }
+//     public constructor() {
+//         // this.authService = new AuthService();
+//     }
 
-        try {
-            const tokenReturn = await this.authService.autenticarUsuario(email, password);
+//     public async auth(req: Request, res: Response): Promise<Response> {
+//         const { email, password } = req.body;
+//         console.log(req.body);
+//         if (!email || !password) {
+//             return res.status(401).json({ status: 400, errors: 'Credenciais inválidas' });
+//         }
 
-            if (tokenReturn === null) {
-                return res.status(401).json({ status: 400, errors: 'Usuário não existe' });
-            }
+//         try {
+//             // const tokenReturn = await this.authService.autenticarUsuario(email, password);
 
-            return res.status(200).json(tokenReturn);
-        } catch (error: any) {
-            console.error(error);
-            if (error instanceof ErrorException) {
-                return res.status(error.statusCode).json({
-                    status: error.statusCode,
-                    error: error.errors,
-                });
-            } else {
-                return res.status(500).json({
-                    status: 500,
-                    error: 'Internal Server Error',
-                });
-            }
-        }
-    }
-}
+//             // if (tokenReturn === null) {
+//             //     return res.status(401).json({ status: 400, errors: 'Usuário não existe' });
+//             // }
 
-export default new AuthController();
+//             // return res.status(200).json(tokenReturn);
+//         } catch (error: any) {
+//             console.error(error);
+//             if (error instanceof ErrorException) {
+//                 return res.status(error.statusCode).json({
+//                     status: error.statusCode,
+//                     error: error.errors,
+//                 });
+//             } else {
+//                 return res.status(500).json({
+//                     status: 500,
+//                     error: 'Internal Server Error',
+//                 });
+//             }
+//         }
+//     }
+// }

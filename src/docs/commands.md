@@ -1,8 +1,6 @@
 # STATUS
 npx sequelize-cli db:migrate:status
 
-
-
 # Gerar uma migration
 npx sequelize-cli migration:generate --name nomedatabela
 
@@ -50,7 +48,5 @@ docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker rmi $(docke
 
 # Docker adicionar usuário sem sudo
 sudo usermod -aG docker $USER
-
-
 
 docker exec -it hostnameDoDockerOuID mysql -u root -p

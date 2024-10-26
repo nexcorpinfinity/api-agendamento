@@ -1,81 +1,85 @@
-import { Request, Response, NextFunction } from 'express';
-import { ErrorsProtocol } from '../interfaces/IUser';
-import validator from 'validator';
-import { UserRepository } from '../repository/UserRepository';
+// import { Request, Response, NextFunction } from 'express';
+// import validator from 'validator';
 
-interface IValidationUser {
-    registroUsuario(req: Request, res: Response, next: NextFunction): void;
-}
+// // import { ErrorsProtocol } from '../interfaces/IUser';
+// // import { UserRepository } from '../repository/UserRepository';
 
-export class ValidationUser implements IValidationUser {
-    private readonly userRepository: UserRepository;
+// interface IValidationUser {
+//     registroUsuario(req: Request, res: Response, next: NextFunction): Promise<void>;
+// }
 
-    constructor() {
-        this.userRepository = new UserRepository();
-        this.registroUsuario = this.registroUsuario.bind(this);
-    }
+// export class ValidationUser implements IValidationUser {
+//     // private readonly userRepository: UserRepository;
 
-    public async registroUsuario(req: Request, res: Response, next: NextFunction) {
-        try {
-            const { name, last_name, name_business, email, password } = req.body;
+//     constructor() {
+//         this.userRepository = new UserRepository();
+//         this.registroUsuario = this.registroUsuario.bind(this);
+//     }
 
-            const errors: Array<ErrorsProtocol> = [];
+//     public async registroUsuario(req: Request, res: Response, next: NextFunction): Promise<void> {
+//         try {
+//             const { name, last_name, name_business, email, password } = req.body;
 
-            // const name = userData.name?.trim() || '';
-            // const lastName = userData.last_name?.trim() || '';
-            // const email = userData.email?.trim() || '';
-            // const password = userData.password?.trim() || '';
+//             const errors: Array<ErrorsProtocol> = [];
 
-            const fieldsToValidate = [
-                { value: name, fieldName: 'Nome' },
-                { value: last_name, fieldName: 'Sobrenome' },
-                { value: name_business, fieldName: 'Nome do Comercio' },
-                { value: email, fieldName: 'Email' },
-                { value: password, fieldName: 'Senha' },
-            ];
+//             // const name = userData.name?.trim() || '';
+//             // const lastName = userData.last_name?.trim() || '';
+//             // const email = userData.email?.trim() || '';
+//             // const password = userData.password?.trim() || '';
 
-            fieldsToValidate.forEach((field) => {
-                this.validateEmptyField(field.value, field.fieldName, errors);
-            });
+//             const fieldsToValidate = [
+//                 { value: name, fieldName: 'Nome' },
+//                 { value: last_name, fieldName: 'Sobrenome' },
+//                 { value: name_business, fieldName: 'Nome do Comercio' },
+//                 { value: email, fieldName: 'Email' },
+//                 { value: password, fieldName: 'Senha' },
+//             ];
 
-            if (name.length < 3) {
-                errors.push({ message: 'Campo nome não pode ser menor que 3 caracteres', campo: 'Nome' });
-            }
-            if (last_name.length < 3) {
-                errors.push({ message: 'Campo sobrenome não pode ser menor que 3 caracteres', campo: 'Sobrenome' });
-            }
+//             fieldsToValidate.forEach((field) => {
+//                 this.validateEmptyField(field.value, field.fieldName, errors);
+//             });
 
-            if (name_business.length < 3) {
-                errors.push({ message: 'Campo Nome do Comercio não pode ser menor que 3 caracteres', campo: 'Nome do Comercio' });
-            }
-            if (email.length < 3) {
-                errors.push({ message: 'Campo email não pode ser menor que 3 caracteres', campo: 'Email' });
-            }
-            if (password.length < 3) {
-                errors.push({ message: 'Campo password não pode ser menor que 3 caracteres', campo: 'Senha' });
-            }
+//             if (name.length < 3) {
+//                 errors.push({ message: 'Campo nome não pode ser menor que 3 caracteres', campo: 'Nome' });
+//             }
+//             if (last_name.length < 3) {
+//                 errors.push({ message: 'Campo sobrenome não pode ser menor que 3 caracteres', campo: 'Sobrenome' });
+//             }
 
-            if (!validator.isEmail(email)) {
-                errors.push({ message: 'Email invalido', campo: 'email' });
-            }
+//             if (name_business.length < 3) {
+//                 errors.push({
+//                     message: 'Campo Nome do Comercio não pode ser menor que 3 caracteres',
+//                     campo: 'Nome do Comercio',
+//                 });
+//             }
+//             if (email.length < 3) {
+//                 errors.push({ message: 'Campo email não pode ser menor que 3 caracteres', campo: 'Email' });
+//             }
+//             if (password.length < 3) {
+//                 errors.push({ message: 'Campo password não pode ser menor que 3 caracteres', campo: 'Senha' });
+//             }
 
-            if (await this.userRepository.validaEmailNoBanco(email)) {
-                errors.push({ message: 'Email já existe', campo: 'email' });
-            }
+//             if (!validator.isEmail(email)) {
+//                 errors.push({ message: 'Email invalido', campo: 'email' });
+//             }
 
-            if (errors.length > 0) {
-                return res.status(400).json({ errors });
-            }
+//             if (await this.userRepository.validaEmailNoBanco(email)) {
+//                 errors.push({ message: 'Email já existe', campo: 'email' });
+//             }
 
-            next();
-        } catch (error) {
-            next(error);
-        }
-    }
+//             if (errors.length > 0) {
+//                 res.status(400).json({ errors });
+//             }
 
-    private validateEmptyField(value: string, fieldName: string, errors: ErrorsProtocol[]) {
-        if (value === '') {
-            errors.push({ message: `Campo ${fieldName} não pode ficar vazio`, campo: fieldName });
-        }
-    }
-}
+//             return next();
+//         } catch (error) {
+//             next(error);
+//         }
+//     }
+
+//     private validateEmptyField(value: string, fieldName: string, errors: ErrorsProtocol[]): void {
+//         if (value === '') {
+//             errors.push({ message: `Campo ${fieldName} não pode ficar vazio`, campo: fieldName });
+//         }
+//     }
+// }

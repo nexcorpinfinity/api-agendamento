@@ -3,7 +3,7 @@ import { authenticateToken } from '../../../middleware/AuthPermission';
 import AuthLoginRequired from '../../../middleware/AuthLoginRequired';
 import CommerceController from '../controllers/CommerceController';
 import ProductsController from '../controllers/ProductsController';
-import { Role } from '../../../types/Enums';
+import { Role } from '../../../types/LogLevel';
 
 const commerceRoute = Router();
 

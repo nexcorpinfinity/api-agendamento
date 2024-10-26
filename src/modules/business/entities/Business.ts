@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelizeConnection } from '../../../config/db/database';
-import { User } from '../../users/entities/User';
+import { User } from '../../users/entities/UserEntity';
 
 export interface IBusiness {
     id: string;

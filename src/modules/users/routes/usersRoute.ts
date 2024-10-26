@@ -1,25 +1,25 @@
 import { Router } from 'express';
+
 import { UserController } from '../controllers/UsersController';
+import { UserEntity } from '../entities/UserEntity';
+// import { ValidationUser } from '../middleware/ValidationsUser';
+import { UserRepository } from '../repository/UserRepository';
 import UserService from '../services/UserService';
-import { ValidationUser } from '../middleware/ValidationsUser';
-// import { authenticateToken } from '../../../middleware/AuthPermission';
-// import { Role } from '../Permissions';
-// import AuthLoginRequired from '../../../middleware/AuthLoginRequired';
 
-const validationUser = new ValidationUser();
+// const validationUser = new ValidationUser();
 
-const userService = new UserService();
+const userEntity = new UserEntity();
+
+const userRepository = new UserRepository(userEntity);
+
+const userService = new UserService(userRepository);
 
 const userController = new UserController(userService);
 
 const usersRoute = Router();
 
-usersRoute.post('/create-user', validationUser.registroUsuario, (req, res) => userController.createUserWithBunisess(req, res));
-
-// apenas user admin pode criar admin
-// usersRoute.post('/cadastrar-admin', AuthLoginRequired, UsersController.createUserAdmin);
-
-// usersRoute.post('/cadastrar-comercio', UsersRoute.createUserAdmin);
-// usersRoute.post('/cadastrar-restaurante', UsersRoute.createUserAdmin);
+usersRoute.post('/user', (req, res) => userController.createClientUser(req, res));
+usersRoute.post('/admin', (req, res) => userController.createAdminUser(req, res));
+usersRoute.post('/business', (req, res) => userController.createBusinessUser(req, res));
 
 export { usersRoute };

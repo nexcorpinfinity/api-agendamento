@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 module.exports = {
     async up(queryInterface, Sequelize) {
         await queryInterface.createTable('subscriptions', {
@@ -40,16 +41,8 @@ module.exports = {
                 allowNull: false,
             },
             status: {
-                type: Sequelize.ENUM('ATIVO', 'CAMCELADO', 'EXPIRADO'),
+                type: Sequelize.ENUM('ATIVO', 'CANCELADO', 'EXPIRADO'),
                 allowNull: false,
-            },
-            start_date: {
-                type: Sequelize.DATE,
-                allowNull: false,
-            },
-            end_date: {
-                type: Sequelize.DATE,
-                allowNull: true,
             },
             cancellation_date: {
                 type: Sequelize.DATE,
@@ -63,7 +56,7 @@ module.exports = {
             updated_at: {
                 type: Sequelize.DATE,
                 allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
             },
         });
     },
