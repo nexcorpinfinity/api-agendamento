@@ -1,3 +1,5 @@
+import { Permissions } from './EnumPermissions';
+
 export interface IUser {
     id?: string;
     name?: string;
@@ -5,14 +7,8 @@ export interface IUser {
     password?: string;
     photo?: string;
     number_phone?: string;
-    permission?: Permission;
+    permission?: Permissions;
     api_key?: string;
     create_at?: Date;
     update_at?: Date;
-}
-
-export enum Permission {
-    Admin = 'admin',
-    Costumer = 'costumer',
-    Client = 'client',
 }

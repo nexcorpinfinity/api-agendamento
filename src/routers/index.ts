@@ -8,12 +8,12 @@ class Routers {
     private versionApiV1: string = '/api/v1';
 
     public constructor() {
-        this.initializeRoutes();
+        this.initializeRoutes(this.versionApiV1);
     }
 
-    private initializeRoutes(): void {
+    private initializeRoutes(versionApi: string): void {
         // this.router.use(`${this.versionApiV1}/auth`, authRoute);
-        this.router.use(`${this.versionApiV1}/users`, usersRoute);
+        this.router.use(`${versionApi}/users`, usersRoute);
     }
 
     public getRouter(): Router {

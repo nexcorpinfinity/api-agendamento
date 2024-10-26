@@ -17,7 +17,7 @@ module.exports = {
                 allowNull: true,
                 unique: true,
                 validate: {
-                    is: /(^\d{3}\.\d{3}\.\d{3}-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$)/, // Valida CPF e CNPJ
+                    is: /(^\d{3}\.\d{3}\.\d{3}-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$)/,
                 },
             },
             address: {
@@ -29,7 +29,7 @@ module.exports = {
                 allowNull: true,
             },
             state: {
-                type: Sequelize.STRING(2), // SP, RJ
+                type: Sequelize.STRING(2),
                 allowNull: true,
             },
             cep: {
@@ -42,13 +42,6 @@ module.exports = {
             photo: {
                 type: Sequelize.STRING,
                 allowNull: true,
-            },
-            telefone: {
-                type: Sequelize.STRING(15),
-                allowNull: true,
-                validate: {
-                    is: /^\+\d{2}\s\(\d{2}\)\s\d{4,5}-\d{4}$/, // Validação de formato de telefone
-                },
             },
             user_id: {
                 type: Sequelize.UUID,
@@ -68,7 +61,9 @@ module.exports = {
             updated_at: {
                 type: Sequelize.DATE,
                 allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+                defaultValue: Sequelize.literal(
+                    'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+                ),
             },
         });
     },
