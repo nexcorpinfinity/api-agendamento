@@ -2,13 +2,17 @@
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 
+import { IBusinessRepository } from '../../business/interface/IBusinessRepository';
 import { Permissions } from '../interfaces/EnumPermissions';
 // import { IUser } from '../interfaces/IUser';
 import { IUserRepository } from '../interfaces/IUserRepository';
 import { IUserService } from '../interfaces/IUserService';
 
 export default class UserService implements IUserService {
-    public constructor(private readonly userRepository: IUserRepository) {}
+    public constructor(
+        private readonly userRepository: IUserRepository,
+        private readonly businessRepository: IBusinessRepository,
+    ) {}
 
     public async createUserClient(
         name: string,
@@ -48,6 +52,7 @@ export default class UserService implements IUserService {
     public async createUserBusiness(
         name: string,
         email: string,
+        name_business: string,
         password: string,
         photo: string,
         number_phone: string,
@@ -63,7 +68,7 @@ export default class UserService implements IUserService {
                 return new Error('Email já existe');
             }
 
-            const user = await this.userRepository.createUser(
+            const userResult = await this.userRepository.createUser(
                 name,
                 email,
                 hashPassword,
@@ -73,7 +78,26 @@ export default class UserService implements IUserService {
                 Permissions.Costumer,
             );
 
-            return user;
+            if (userResult instanceof Error) {
+                console.error('Erro ao criar usuário:', userResult.message);
+                return userResult;
+            }
+
+            const { id } = userResult;
+
+            const result = await this.businessRepository.createBusiness(
+                name_business,
+                String(id),
+            );
+
+            if (result instanceof Error) {
+                console.error('Erro ao criar usuário:');
+                return result;
+            }
+
+            console.log(result);
+
+            return userResult;
         } catch (error) {
             console.log(error);
             throw error;

@@ -47,11 +47,13 @@ export class UserController implements IUserController {
         res: Response,
     ): Promise<Response<string, Record<string, string>>> {
         try {
-            const { name, email, password, photo, number_phone } = req.body;
+            const { name, email, name_business, password, photo, number_phone } =
+                req.body;
 
             const result = await this.userService.createUserBusiness(
                 name,
                 email,
+                name_business,
                 password,
                 photo,
                 number_phone,

@@ -3,9 +3,9 @@ import { Model, DataTypes } from 'sequelize';
 import { sequelizeConnection } from '../../../config/db/database';
 import { UserEntity } from '../../users/entities/UserEntity';
 
-class Business extends Model {}
+class BusinessEntity extends Model {}
 
-Business.init(
+BusinessEntity.init(
     {
         id: {
             type: DataTypes.UUID,
@@ -64,11 +64,11 @@ Business.init(
     },
 );
 
-UserEntity.hasOne(Business, {
+UserEntity.hasOne(BusinessEntity, {
     foreignKey: 'user_id',
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE',
 });
-Business.belongsTo(UserEntity, { foreignKey: 'user_id' });
+BusinessEntity.belongsTo(UserEntity, { foreignKey: 'user_id' });
 
-export { Business };
+export { BusinessEntity };

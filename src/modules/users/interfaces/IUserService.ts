@@ -18,6 +18,7 @@ export interface IUserService {
     createUserBusiness(
         name: string,
         email: string,
+        name_business: string,
         password: string,
         photo: string,
         number_phone: string,
