@@ -19,11 +19,6 @@ module.exports = {
                 { type: Sequelize.QueryTypes.SELECT },
             );
 
-            const lorenabusinessSegmentsTypes = await queryInterface.sequelize.query(
-                `SELECT id FROM segments_segments_types WHERE segment_type_id = '${lorenasegments_typeId[0].id}' LIMIT 1;`,
-                { type: Sequelize.QueryTypes.SELECT },
-            );
-
             const douglasBusinessId = await queryInterface.sequelize.query(
                 "SELECT id FROM business WHERE name = 'Barbearia Douglas' LIMIT 1;",
                 { type: Sequelize.QueryTypes.SELECT },
@@ -31,11 +26,6 @@ module.exports = {
 
             const douglassegments_typeId = await queryInterface.sequelize.query(
                 "SELECT id FROM segments_types WHERE name = 'Barbearia' LIMIT 1;",
-                { type: Sequelize.QueryTypes.SELECT },
-            );
-
-            const douglasbusinessSegmentsTypes = await queryInterface.sequelize.query(
-                `SELECT id FROM segments_segments_types WHERE segment_type_id = '${douglassegments_typeId[0].id}' LIMIT 1;`,
                 { type: Sequelize.QueryTypes.SELECT },
             );
 
@@ -49,23 +39,18 @@ module.exports = {
                 { type: Sequelize.QueryTypes.SELECT },
             );
 
-            const amandabusinessSegmentsTypes = await queryInterface.sequelize.query(
-                `SELECT id FROM segments_segments_types WHERE segment_type_id = '${amandasegments_typeId[0].id}' LIMIT 1;`,
-                { type: Sequelize.QueryTypes.SELECT },
-            );
-
-            await queryInterface.bulkInsert('business_segments_segments_types', [
+            await queryInterface.bulkInsert('business_segments_types', [
                 {
                     fk_business_id: lorenaBusinessId[0].id,
-                    fk_segments_segments_types_id: lorenabusinessSegmentsTypes[0].id,
+                    fk_segments_types_id: lorenasegments_typeId[0].id,
                 },
                 {
                     fk_business_id: douglasBusinessId[0].id,
-                    fk_segments_segments_types_id: douglasbusinessSegmentsTypes[0].id,
+                    fk_segments_types_id: douglassegments_typeId[0].id,
                 },
                 {
                     fk_business_id: amandaBusinessId[0].id,
-                    fk_segments_segments_types_id: amandabusinessSegmentsTypes[0].id,
+                    fk_segments_types_id: amandasegments_typeId[0].id,
                 },
             ]);
         } catch (error) {
@@ -74,6 +59,6 @@ module.exports = {
     },
 
     async down(queryInterface, Sequelize) {
-        await queryInterface.bulkDelete('business_segments_segments_types', null, {});
+        await queryInterface.bulkDelete('business_segments_types', null, {});
     },
 };

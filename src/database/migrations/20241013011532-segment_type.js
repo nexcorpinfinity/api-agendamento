@@ -13,6 +13,17 @@ module.exports = {
                 allowNull: false,
                 unique: true,
             },
+            segment_id: {
+                type: Sequelize.UUID,
+                allowNull: false,
+                unique: false,
+                references: {
+                    model: 'segments',
+                    key: 'id',
+                },
+                onUpdate: 'CASCADE',
+                onDelete: 'CASCADE',
+            },
             created_at: {
                 type: Sequelize.DATE,
                 allowNull: false,
