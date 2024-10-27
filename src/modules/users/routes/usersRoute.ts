@@ -1,19 +1,29 @@
 import { Router } from 'express';
 
 import { BusinessRepository } from '../../business/repository/BusinessRepository';
+import { BusinessSegmentsTypesRepository } from '../../business/repository/BusinessSegmentsTypesRepository';
+import { SegmentsTypesRepository } from '../../segments/repositories/SegmentsTypesRepository';
 import { UserController } from '../controllers/UsersController';
-import { UserEntity } from '../entities/UserEntity';
 import { ValidationUser } from '../middleware/ValidationsUser';
 import { UserRepository } from '../repository/UserRepository';
-import UserService from '../services/UserService';
+import { UserService } from '../services/UserService';
 
 const validationUser = new ValidationUser();
 
-const userRepository = new UserRepository(UserEntity);
+const userRepository = new UserRepository();
 
 const businessRepository = new BusinessRepository();
 
-const userService = new UserService(userRepository, businessRepository);
+const segmentTypeRepository = new SegmentsTypesRepository();
+
+const businessSegmentsTypesRepository = new BusinessSegmentsTypesRepository();
+
+const userService = new UserService(
+    userRepository,
+    businessRepository,
+    segmentTypeRepository,
+    businessSegmentsTypesRepository,
+);
 
 const userController = new UserController(userService);
 
@@ -25,7 +35,7 @@ usersRoute.post('/client', validationUser.createdUsers, (req, res) =>
 usersRoute.post('/admin', validationUser.createdUsers, (req, res) =>
     userController.createAdminUser(req, res),
 );
-usersRoute.post('/business', validationUser.createdUsers, (req, res) =>
+usersRoute.post('/business', validationUser.createdUserBusiness, (req, res) =>
     userController.createBusinessUser(req, res),
 );
 

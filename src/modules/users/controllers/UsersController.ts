@@ -31,12 +31,7 @@ export class UserController implements IUserController {
                 return ResponseHandler.error(res, 400, result.message);
             }
 
-            return ResponseHandler.success(
-                res,
-                201,
-                result,
-                'Usuario cliente criado com sucesso',
-            );
+            return ResponseHandler.success(res, 201, result, 'Usuario cliente criado com sucesso');
         } catch (error) {
             console.log(error);
             return ResponseHandler.error(res, 500);
@@ -47,7 +42,7 @@ export class UserController implements IUserController {
         res: Response,
     ): Promise<Response<string, Record<string, string>>> {
         try {
-            const { name, email, name_business, password, photo, number_phone } =
+            const { name, email, name_business, password, photo, number_phone, segment_type_id } =
                 req.body;
 
             const result = await this.userService.createUserBusiness(
@@ -57,6 +52,7 @@ export class UserController implements IUserController {
                 password,
                 photo,
                 number_phone,
+                segment_type_id,
             );
 
             console.log(result);
@@ -69,12 +65,7 @@ export class UserController implements IUserController {
                 return ResponseHandler.error(res, 400, result.message);
             }
 
-            return ResponseHandler.success(
-                res,
-                201,
-                result,
-                'Usuario cliente criado com sucesso',
-            );
+            return ResponseHandler.success(res, 201, result, 'Usuario cliente criado com sucesso');
         } catch (error) {
             console.log(error);
             return ResponseHandler.error(res, 500);
@@ -103,12 +94,7 @@ export class UserController implements IUserController {
                 return ResponseHandler.error(res, 400, result.message);
             }
 
-            return ResponseHandler.success(
-                res,
-                201,
-                result,
-                'Usuario cliente criado com sucesso',
-            );
+            return ResponseHandler.success(res, 201, result, 'Usuario cliente criado com sucesso');
         } catch (error) {
             console.log(error);
             return ResponseHandler.error(res, 500);

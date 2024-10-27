@@ -5,6 +5,7 @@ module.exports = {
             fk_business_id: {
                 type: Sequelize.UUID,
                 allowNull: false,
+                primaryKey: true,
                 references: {
                     model: 'business',
                     key: 'id',
@@ -12,9 +13,10 @@ module.exports = {
                 onUpdate: 'CASCADE',
                 onDelete: 'CASCADE',
             },
-            fk_segments_types_id: {
+            fk_segment_type_id: {
                 type: Sequelize.UUID,
                 allowNull: false,
+                primaryKey: true,
                 references: {
                     model: 'segments_types',
                     key: 'id',
@@ -22,12 +24,16 @@ module.exports = {
                 onUpdate: 'CASCADE',
                 onDelete: 'CASCADE',
             },
-        });
-
-        await queryInterface.addConstraint('business_segments_types', {
-            fields: ['fk_business_id', 'fk_segments_types_id'],
-            type: 'primary key',
-            name: 'pk_business_segments_types',
+            created_at: {
+                type: Sequelize.DATE,
+                allowNull: false,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+            },
+            updated_at: {
+                type: Sequelize.DATE,
+                allowNull: false,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+            },
         });
     },
 

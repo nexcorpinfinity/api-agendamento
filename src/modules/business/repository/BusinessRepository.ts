@@ -7,14 +7,19 @@ export class BusinessRepository implements IBusinessRepository {
     public async createBusiness(
         nameBusiness: string,
         idUser: string,
-    ): Promise<BusinessEntity | Error> {
+    ): Promise<{ id: string; name: string } | Error> {
         try {
-            const create = await this.business.create({
+            const business = await this.business.create({
                 name: nameBusiness,
                 user_id: idUser,
             });
 
-            return create;
+            const businessData = business.get({ plain: true });
+
+            const id = businessData.id ?? '';
+            const name = businessData.name ?? '';
+
+            return { id, name };
         } catch (error) {
             console.log(error);
             throw new Error('Error criar business');

@@ -51,7 +51,7 @@ BusinessEntity.init(
             type: DataTypes.UUID,
             allowNull: true,
             references: {
-                model: 'users',
+                model: UserEntity,
                 key: 'id',
             },
             unique: true,

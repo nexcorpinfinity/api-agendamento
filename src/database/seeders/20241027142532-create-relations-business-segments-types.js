@@ -42,15 +42,15 @@ module.exports = {
             await queryInterface.bulkInsert('business_segments_types', [
                 {
                     fk_business_id: lorenaBusinessId[0].id,
-                    fk_segments_types_id: lorenasegments_typeId[0].id,
+                    fk_segment_type_id: lorenasegments_typeId[0].id,
                 },
                 {
                     fk_business_id: douglasBusinessId[0].id,
-                    fk_segments_types_id: douglassegments_typeId[0].id,
+                    fk_segment_type_id: douglassegments_typeId[0].id,
                 },
                 {
                     fk_business_id: amandaBusinessId[0].id,
-                    fk_segments_types_id: amandasegments_typeId[0].id,
+                    fk_segment_type_id: amandasegments_typeId[0].id,
                 },
             ]);
         } catch (error) {

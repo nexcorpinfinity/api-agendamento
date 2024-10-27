@@ -53,14 +53,6 @@ module.exports = {
                 return new Error('Segmento Serviços não encontrado');
             }
 
-            console.log(
-                servicoID[0].id,
-                bemEstarID[0].id,
-                belezaID[0].id,
-                saudeID[0].id,
-                agendaInteligenteID[0].id,
-            );
-
             await queryInterface.bulkInsert('segments_types', [
                 {
                     id: uuidv4(),

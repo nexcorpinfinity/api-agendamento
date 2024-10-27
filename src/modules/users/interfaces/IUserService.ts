@@ -22,5 +22,6 @@ export interface IUserService {
         password: string,
         photo: string,
         number_phone: string,
+        segment_type_id: string,
     ): Promise<{ id: string; name: string; email: string } | Error>;
 }

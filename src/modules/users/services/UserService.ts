@@ -3,15 +3,19 @@ import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 
 import { IBusinessRepository } from '../../business/interface/IBusinessRepository';
+import { IBusinessSegmentsTypesRepository } from '../../business/interface/IBusinessSegmentsTypesRepository';
+import { ISegmentsTypesRepository } from '../../segments/intefaces/ISegmentsTypesRepository';
 import { Permissions } from '../interfaces/EnumPermissions';
 // import { IUser } from '../interfaces/IUser';
 import { IUserRepository } from '../interfaces/IUserRepository';
 import { IUserService } from '../interfaces/IUserService';
 
-export default class UserService implements IUserService {
+export class UserService implements IUserService {
     public constructor(
         private readonly userRepository: IUserRepository,
         private readonly businessRepository: IBusinessRepository,
+        private readonly segmentTypesRepository: ISegmentsTypesRepository,
+        private readonly businessSegmentsTypesRepository: IBusinessSegmentsTypesRepository,
     ) {}
 
     public async createUserClient(
@@ -56,6 +60,7 @@ export default class UserService implements IUserService {
         password: string,
         photo: string,
         number_phone: string,
+        segment_type_id: string,
     ): Promise<{ id: string; name: string; email: string } | Error> {
         try {
             const hashPassword = this.generateHashPassWord(String(password));
@@ -66,6 +71,15 @@ export default class UserService implements IUserService {
 
             if (verifyExistEmail === true) {
                 return new Error('Email já existe');
+            }
+
+            const verifyExistSegmentTypes =
+                await this.segmentTypesRepository.verifySegmentTypeExists(segment_type_id);
+
+            console.log(verifyExistSegmentTypes);
+
+            if (verifyExistSegmentTypes === false) {
+                return new Error('Segmento não existe');
             }
 
             const userResult = await this.userRepository.createUser(
@@ -85,17 +99,25 @@ export default class UserService implements IUserService {
 
             const { id } = userResult;
 
-            const result = await this.businessRepository.createBusiness(
+            const resultBusiness = await this.businessRepository.createBusiness(
                 name_business,
                 String(id),
             );
 
-            if (result instanceof Error) {
+            if (resultBusiness instanceof Error) {
                 console.error('Erro ao criar usuário:');
-                return result;
+                return resultBusiness;
             }
 
-            console.log(result);
+            const idBusiness = resultBusiness.id;
+
+            const createBondBusiAndSeg =
+                await this.businessSegmentsTypesRepository.createBusinessSegmentsTypes(
+                    idBusiness,
+                    segment_type_id,
+                );
+
+            console.log(createBondBusiAndSeg);
 
             return userResult;
         } catch (error) {
