@@ -32,7 +32,7 @@ module.exports = {
                 type: Sequelize.STRING(2),
                 allowNull: true,
             },
-            cep: {
+            zip: {
                 type: Sequelize.STRING(9),
                 allowNull: true,
                 validate: {

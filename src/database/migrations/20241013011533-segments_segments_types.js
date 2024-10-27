@@ -1,45 +1,34 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('users', {
+        await queryInterface.createTable('segments_segments_types', {
             id: {
                 type: Sequelize.UUID,
                 defaultValue: Sequelize.UUIDV4,
                 allowNull: false,
                 primaryKey: true,
             },
-            name: {
-                type: Sequelize.STRING(20),
+            segment_id: {
+                type: Sequelize.UUID,
                 allowNull: false,
-            },
-            email: {
-                type: Sequelize.STRING,
-                allowNull: false,
-                unique: true,
-                validate: {
-                    isEmail: true,
+                unique: false,
+                references: {
+                    model: 'segments',
+                    key: 'id',
                 },
+                onUpdate: 'CASCADE',
+                onDelete: 'CASCADE',
             },
-            password: {
-                type: Sequelize.STRING,
+            segment_type_id: {
+                type: Sequelize.UUID,
                 allowNull: false,
-            },
-            photo: {
-                type: Sequelize.STRING,
-                allowNull: true,
-            },
-            number_phone: {
-                type: Sequelize.STRING(15),
-                allowNull: true,
-            },
-            permission: {
-                type: Sequelize.ENUM('admin', 'costumer', 'client'),
-                allowNull: false,
-            },
-            api_key: {
-                type: Sequelize.STRING(64),
-                allowNull: true,
                 unique: true,
+                references: {
+                    model: 'segments_types',
+                    key: 'id',
+                },
+                onUpdate: 'CASCADE',
+                onDelete: 'CASCADE',
             },
             created_at: {
                 type: Sequelize.DATE,
@@ -57,6 +46,6 @@ module.exports = {
     },
 
     async down(queryInterface) {
-        await queryInterface.dropTable('users');
+        await queryInterface.dropTable('segments_segments_types');
     },
 };

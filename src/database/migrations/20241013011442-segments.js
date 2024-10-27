@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('users', {
+        await queryInterface.createTable('segments', {
             id: {
                 type: Sequelize.UUID,
                 defaultValue: Sequelize.UUIDV4,
@@ -11,34 +11,6 @@ module.exports = {
             name: {
                 type: Sequelize.STRING(20),
                 allowNull: false,
-            },
-            email: {
-                type: Sequelize.STRING,
-                allowNull: false,
-                unique: true,
-                validate: {
-                    isEmail: true,
-                },
-            },
-            password: {
-                type: Sequelize.STRING,
-                allowNull: false,
-            },
-            photo: {
-                type: Sequelize.STRING,
-                allowNull: true,
-            },
-            number_phone: {
-                type: Sequelize.STRING(15),
-                allowNull: true,
-            },
-            permission: {
-                type: Sequelize.ENUM('admin', 'costumer', 'client'),
-                allowNull: false,
-            },
-            api_key: {
-                type: Sequelize.STRING(64),
-                allowNull: true,
                 unique: true,
             },
             created_at: {
@@ -57,6 +29,6 @@ module.exports = {
     },
 
     async down(queryInterface) {
-        await queryInterface.dropTable('users');
+        await queryInterface.dropTable('segments');
     },
 };
