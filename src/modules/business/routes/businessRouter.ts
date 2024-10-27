@@ -2,6 +2,6 @@ import { Router } from 'express';
 
 const businessRouter = Router();
 
-businessRouter.get('/usuario');
+// businessRouter.get('/usuario');
 
 export { businessRouter };

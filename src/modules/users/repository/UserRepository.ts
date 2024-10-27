@@ -1,5 +1,6 @@
 import { UserEntity } from '../entities/UserEntity';
 import { Permissions } from '../interfaces/EnumPermissions';
+import { IUser } from '../interfaces/IUser';
 import { IUserRepository } from '../interfaces/IUserRepository';
 
 class UserRepository implements IUserRepository {
@@ -50,6 +51,17 @@ class UserRepository implements IUserRepository {
         } catch (error) {
             console.log(error);
             throw new Error('Erro ao verificar email');
+        }
+    }
+
+    public async getAllDataUser(emailReceived: string): Promise<IUser | undefined> {
+        try {
+            const data = await this.userEntity.findOne({ where: { email: emailReceived } });
+
+            return data?.dataValues;
+        } catch (error) {
+            console.log(error);
+            throw new Error('Erro ao buscar dados do usuário');
         }
     }
 }

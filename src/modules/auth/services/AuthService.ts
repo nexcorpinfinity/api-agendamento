@@ -1,96 +1,91 @@
-// import { Request } from 'express';
-// import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { v4 as uuidv4 } from 'uuid';
 
-// import { receberIdPeloToken } from '../../../utils/DecodeToken';
-// import { ErrorException } from '../../../utils/ErrorException';
-// // import { UserEntity } from '../../users/entities/UserEntity';
-// // import { UserRepository } from '../../users/repository/UserRepository';
+import { IUserRepository } from '../../users/interfaces/IUserRepository';
+import { IAuthService } from '../interfaces/IAuthService';
 
-// interface UserLogged {
-//     id: string;
-//     permission: string[];
-// }
-// export default class AuthService {
-//     private userRepository: UserRepository;
+export class AuthService implements IAuthService {
+    public constructor(private userRepository: IUserRepository) {}
 
-//     public constructor() {
-//         this.userRepository = new UserRepository();
-//     }
+    public async auth(
+        email: string,
+        password: string,
+        stay_connected: boolean,
+    ): Promise<string | Error> {
+        try {
+            const verifyExistEmailUser = await this.userRepository.verifyEmailExists(email);
 
-//     public async autenticarUsuario(emailReceived: string, passwordReceived: string) {
-//         const errors = [];
+            if (verifyExistEmailUser === false) {
+                throw new Error('Email informado não existe.');
+            }
 
-//         if (!emailReceived || !passwordReceived) {
-//             errors.push({ message: 'Campo Login e senha não informado', campo: 'Todos' });
-//         }
+            const getDataUser = await this.userRepository.getAllDataUser(email);
 
-//         //importar o validator para verificar o email
-//         // if (email) {
-//         //     errors.push({ message: 'Email invalido', campo: 'email' });
-//         // }
+            console.log(getDataUser);
 
-//         // if (password.length <= 6) {
-//         //     errors.push({ message: 'Campo senha não pode ser menor que 6 caracteres', campo: 'password' });
-//         // }
+            if (getDataUser === undefined || getDataUser === null) {
+                throw new Error('Erro ao trazer dados do usuário');
+            }
 
-//         // faz uma consulta no banco com o email informado
-//         const user = await this.userRepository.findByEmailAuth(emailReceived);
+            const checkPassValid = await this.verifyPasswordAndCompare(
+                password,
+                String(getDataUser?.password),
+            );
 
-//         console.log('olha ele ai', user);
+            if (checkPassValid === false) {
+                throw new Error('Senha inválida');
+            }
 
-//         if (!user) {
-//             errors.push({ message: 'Usuario não existente', campo: 'email' });
-//             throw new ErrorException(errors, 400);
-//         }
+            const token = await this.generateToken(
+                Number(getDataUser.id),
+                String(getDataUser.name),
+                String(getDataUser.permission),
+                Boolean(stay_connected),
+            );
 
-//         const id: number | undefined = user.id;
-//         const name: string | undefined = user.name;
-//         const email: string | undefined = user.email;
-//         const permission: string | undefined = user.permission;
+            return String(token);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            return new Error(error.message);
+        }
+    }
 
-//         // const senhaHash: string | undefined = user.password;
+    private async verifyPasswordAndCompare(
+        password: string,
+        hashPassword: string,
+    ): Promise<boolean> {
+        return await bcrypt.compare(password, hashPassword);
+    }
 
-//         // const passwordIsValid = UserEntity.isValidPassword(passwordReceived, senhaHash);
+    private async generateToken(
+        id: number,
+        name: string,
+        permission: string,
+        stay_connected: boolean,
+    ): Promise<string | Error> {
+        try {
+            const expiration = stay_connected ? '5d' : process.env.TOKEN_EXPIRATION;
 
-//         // if (passwordIsValid !== true) {
-//         //     errors.push({ message: 'Senha invalida', campo: 'password' });
-//         // }
+            const jti = uuidv4();
+            console.log(jti);
 
-//         if (errors.length > 0) {
-//             throw new ErrorException(errors, 400);
-//         }
+            const token = jwt.sign(
+                {
+                    id,
+                    name,
+                    permission,
+                    jti,
+                },
+                process.env.TOKEN_SECRET as string,
+                {
+                    expiresIn: expiration,
+                },
+            );
 
-//         const token = jwt.sign({ id, name, email, permission }, process.env.TOKEN_SECRET as string, {
-//             expiresIn: process.env.TOKEN_EXPIRATION,
-//         });
-
-//         console.log(token);
-
-//         return { token };
-//     }
-
-//     public usuarioAutenticado(req: Request): UserLogged | undefined {
-//         const authHeader = req.headers.authorization;
-
-//         console.log(authHeader);
-
-//         if (!authHeader) {
-//             console.error('O token é undefined');
-//             return undefined;
-//         }
-//         const token = authHeader.split(' ')[1];
-
-//         console.log(token);
-
-//         const userLogged = receberIdPeloToken(token);
-
-//         console.log(userLogged);
-
-//         if (!userLogged) {
-//             console.error('Falha ao decodificar o token');
-//             return undefined;
-//         }
-
-//         return userLogged;
-//     }
-// }
+            return token;
+        } catch (error) {
+            return new Error('Erro ao gerar token');
+        }
+    }
+}

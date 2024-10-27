@@ -1,44 +1,39 @@
-// /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { Request, Response } from 'express';
+import { Request, Response } from 'express';
 
-// import { ErrorException } from '../../../utils/ErrorException';
-// // import AuthService from '../services/AuthService';
+import { ResponseHandler } from '../../../config/ResponseHTTP/ResponseHTTP';
+import { IAuthService } from '../interfaces/IAuthService';
 
-// export class AuthController {
-//     // private readonly authService: AuthService;
+// import { IAuthController } from '../interfaces/IAuthController';
+// import { IAuthService } from '../interfaces/IAuthService';
 
-//     public constructor() {
-//         // this.authService = new AuthService();
-//     }
+export class AuthController {
+    public constructor(private readonly authService: IAuthService) {}
 
-//     public async auth(req: Request, res: Response): Promise<Response> {
-//         const { email, password } = req.body;
-//         console.log(req.body);
-//         if (!email || !password) {
-//             return res.status(401).json({ status: 400, errors: 'Credenciais inválidas' });
-//         }
+    public async auth(
+        req: Request,
+        res: Response,
+    ): Promise<Response<string, Record<string, string>>> {
+        const { email, password, stay_connected } = req.body;
 
-//         try {
-//             // const tokenReturn = await this.authService.autenticarUsuario(email, password);
+        try {
+            const authSession = await this.authService.auth(email, password, stay_connected);
 
-//             // if (tokenReturn === null) {
-//             //     return res.status(401).json({ status: 400, errors: 'Usuário não existe' });
-//             // }
+            if (!authSession) {
+                return ResponseHandler.error(res, 401, 'Erro ao fazer login');
+            }
 
-//             // return res.status(200).json(tokenReturn);
-//         } catch (error: any) {
-//             console.error(error);
-//             if (error instanceof ErrorException) {
-//                 return res.status(error.statusCode).json({
-//                     status: error.statusCode,
-//                     error: error.errors,
-//                 });
-//             } else {
-//                 return res.status(500).json({
-//                     status: 500,
-//                     error: 'Internal Server Error',
-//                 });
-//             }
-//         }
-//     }
-// }
+            if (authSession instanceof Error) {
+                return ResponseHandler.error(res, 401, authSession.message);
+            }
+
+            return ResponseHandler.success(
+                res,
+                200,
+                { token: authSession },
+                'Login feito com sucesso.',
+            );
+        } catch (error) {
+            return ResponseHandler.error(res, 500);
+        }
+    }
+}

@@ -1,4 +1,5 @@
 import { Permissions } from './EnumPermissions';
+import { IUser } from './IUser';
 
 export interface IUserRepository {
     createUser(
@@ -12,4 +13,5 @@ export interface IUserRepository {
     ): Promise<{ id: string; name: string; email: string } | Error>;
 
     verifyEmailExists(emailReceived: string): Promise<boolean>;
+    getAllDataUser(emailReceived: string): Promise<IUser | undefined>;
 }

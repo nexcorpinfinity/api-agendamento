@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
+import { authRoute } from '../modules/auth/routes/authRoute';
 import { usersRoute } from '../modules/users/routes/usersRoute';
-// import { authRoute } from '../modules/auth/routes/authRoute';
 
 class Routers {
     private router: Router = Router();
@@ -12,7 +12,7 @@ class Routers {
     }
 
     private initializeRoutes(versionApi: string): void {
-        // this.router.use(`${this.versionApiV1}/auth`, authRoute);
+        this.router.use(`${this.versionApiV1}/auth`, authRoute);
         this.router.use(`${versionApi}/users`, usersRoute);
     }
 
