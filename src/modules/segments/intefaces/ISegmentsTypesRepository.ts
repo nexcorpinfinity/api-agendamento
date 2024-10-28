@@ -6,4 +6,6 @@ export interface ISegmentsTypesRepository {
         segment_id: string,
     ): Promise<SegmentsTypesEntity | Error>;
     verifySegmentTypeExists(segmentTypeId: string): Promise<boolean>;
+    getSegmentTypeById(segmentTypeId: string): Promise<SegmentsTypesEntity | Error>;
+    getSegmentTypes(): Promise<SegmentsTypesEntity[] | Error>;
 }

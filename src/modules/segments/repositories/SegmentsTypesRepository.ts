@@ -29,4 +29,29 @@ export class SegmentsTypesRepository implements ISegmentsTypesRepository {
             throw new Error('Error ao verificar segment type');
         }
     }
+
+    public async getSegmentTypes(): Promise<SegmentsTypesEntity[] | Error> {
+        try {
+            const segmentTypes = await this.segmentsTypeEntity.findAll();
+            return segmentTypes;
+        } catch (error) {
+            console.log(error);
+            throw new Error('Error ao buscar segment types');
+        }
+    }
+
+    public async getSegmentTypeById(segmentTypeId: string): Promise<SegmentsTypesEntity | Error> {
+        try {
+            const segmentType = await this.segmentsTypeEntity.findByPk(segmentTypeId);
+
+            if (!segmentType) {
+                throw new Error('Segment type não encontrado');
+            }
+
+            return segmentType.dataValues;
+        } catch (error) {
+            console.log(error);
+            throw new Error('Error ao buscar segment type');
+        }
+    }
 }

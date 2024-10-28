@@ -14,7 +14,7 @@ export class SegmentsRepository {
             throw new Error('Error criar segment');
         }
     }
-    public async getSegments(): Promise<SegmentsEntity[] | Error> {
+    public async getAllSegments(): Promise<SegmentsEntity[] | Error> {
         try {
             const segments = await this.segmentsEntity.findAll();
             return segments;
@@ -32,7 +32,7 @@ export class SegmentsRepository {
                 throw new Error('Segmento não encontrado');
             }
 
-            return segment;
+            return segment.dataValues;
         } catch (error) {
             console.log(error);
             throw new Error('Error buscar segmento');
