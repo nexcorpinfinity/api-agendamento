@@ -6,7 +6,7 @@ export class BusinessSegmentsTypesRepository implements IBusinessSegmentsTypesRe
         private readonly businessSegmentsTypesEntity = BusinessSegmentsTypesEntity,
     ) {}
 
-    public async createBusinessSegmentsTypes(
+    public async createBondBusinessSegmentsTypes(
         businessId: string,
         segmentTypeId: string,
     ): Promise<BusinessSegmentsTypesEntity | Error> {

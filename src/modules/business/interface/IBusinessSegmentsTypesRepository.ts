@@ -1,7 +1,7 @@
 import { BusinessSegmentsTypesEntity } from '../entities/BusinessSegmentsTypes';
 
 export interface IBusinessSegmentsTypesRepository {
-    createBusinessSegmentsTypes(
+    createBondBusinessSegmentsTypes(
         businessId: string,
         segmentTypeId: string,
     ): Promise<BusinessSegmentsTypesEntity | Error>;
