@@ -112,7 +112,7 @@ export class UserService implements IUserService {
             const idBusiness = resultBusiness.id;
 
             const createBondBusiAndSeg =
-                await this.businessSegmentsTypesRepository.createBusinessSegmentsTypes(
+                await this.businessSegmentsTypesRepository.createBondBusinessSegmentsTypes(
                     idBusiness,
                     segment_type_id,
                 );

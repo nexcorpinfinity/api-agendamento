@@ -9,15 +9,13 @@ export class BusinessRepository implements IBusinessRepository {
         idUser: string,
     ): Promise<{ id: string; name: string } | Error> {
         try {
-            const business = await this.business.create({
+            const { dataValues } = await this.business.create({
                 name: nameBusiness,
                 user_id: idUser,
             });
 
-            const businessData = business.get({ plain: true });
-
-            const id = businessData.id ?? '';
-            const name = businessData.name ?? '';
+            const id = dataValues.id;
+            const name = dataValues.name;
 
             return { id, name };
         } catch (error) {
