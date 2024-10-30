@@ -8,6 +8,8 @@
         ],
         "outDir": "./dist",
         "rootDir": "./src",
+        "sourceMap": true,
+        "moduleResolution": "node",
         "removeComments": true,
         "noEmitOnError": true,
         "strict": true,
