@@ -1,24 +1,42 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
+import { ResponseHandler } from '../config/ResponseHTTP/ResponseHTTP';
+
 export default (req: Request, res: Response, next: NextFunction): Response | void => {
     const authorization: string | undefined = req.headers.authorization;
+
+    console.log(authorization);
+
+    if (!authorization || !authorization.startsWith('Bearer ')) {
+        return ResponseHandler.error(res, 401, 'Usuário não autenticado.');
+    }
 
     if (authorization && authorization.startsWith('Bearer ')) {
         const token = authorization.split(' ')[1];
 
         try {
-            const data: string | JwtPayload = jwt.verify(token, process.env.TOKEN_SECRET as string);
+            const data: string | JwtPayload = jwt.verify(
+                token,
+                process.env.TOKEN_SECRET as string,
+                {
+                    algorithms: ['HS256'],
+                },
+            );
 
-            const { id } = data as JwtPayload;
+            const { id, permission } = data as JwtPayload;
 
-            console.log('Token válido:', data);
-            res.locals.user = id;
+            console.log(data);
+            console.log('Token válido:', { id, permission });
+            res.locals.user = { id, permission };
+
+            res.setHeader('Cache-Control', 'no-store');
+            res.setHeader('Pragma', 'no-cache');
+
             return next();
-        } catch (e) {
-            return res.status(401).json({ error: 'Token inválido' });
+        } catch (error: any) {
+            return ResponseHandler.error(res, 401, error);
         }
     }
-
-    return res.status(401).json({ error: 'Token não fornecido' });
 };
