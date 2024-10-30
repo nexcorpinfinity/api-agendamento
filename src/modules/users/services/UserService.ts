@@ -62,22 +62,18 @@ export class UserService implements IUserService {
         number_phone: string,
         segment_type_id: string,
     ): Promise<{ id: string; name: string; email: string } | Error> {
+        // Define o tipo de retorno
         try {
             const hashPassword = this.generateHashPassWord(String(password));
-
             const apiKey = this.generateApiKey();
 
             const verifyExistEmail = await this.userRepository.verifyEmailExists(email);
-
             if (verifyExistEmail === true) {
                 return new Error('Email já existe');
             }
 
             const verifyExistSegmentTypes =
                 await this.segmentTypesRepository.verifySegmentTypeExists(segment_type_id);
-
-            console.log(verifyExistSegmentTypes);
-
             if (verifyExistSegmentTypes === false) {
                 return new Error('Segmento não existe');
             }
@@ -97,32 +93,42 @@ export class UserService implements IUserService {
                 return userResult;
             }
 
+            console.log('idBusiness', 44);
+
             const { id } = userResult;
 
-            const resultBusiness = await this.businessRepository.createBusiness(
-                name_business,
-                String(id),
-            );
-
-            if (resultBusiness instanceof Error) {
-                console.error('Erro ao criar usuário:');
-                return resultBusiness;
-            }
-
-            const idBusiness = resultBusiness.id;
-
-            const createBondBusiAndSeg =
-                await this.businessSegmentsTypesRepository.createBondBusinessSegmentsTypes(
-                    idBusiness,
-                    segment_type_id,
+            if (userResult) {
+                const resultBusiness = await this.businessRepository.createBusiness(
+                    name_business,
+                    String(id),
                 );
+                console.log('idBusiness', 55);
 
-            console.log(createBondBusiAndSeg);
+                if (resultBusiness instanceof Error) {
+                    return new Error('Erro ao criar comercio');
+                }
+
+                const idBusiness = resultBusiness.id;
+
+                if (idBusiness) {
+                    const createBondBusiAndSeg =
+                        await this.businessSegmentsTypesRepository.createBondBusinessSegmentsTypes(
+                            idBusiness,
+                            segment_type_id,
+                        );
+                    console.log('idBusiness', 667);
+
+                    if (createBondBusiAndSeg instanceof Error) {
+                        console.error('Erro ao criar vínculo do comércio');
+                        return new Error('Erro ao criar vínculo do comércio');
+                    }
+                }
+            }
 
             return userResult;
         } catch (error) {
-            console.log(error);
-            throw error;
+            console.error('Erro em createUserBusiness:', error);
+            return new Error('Erro desconhecido ao criar usuário e negócio');
         }
     }
 

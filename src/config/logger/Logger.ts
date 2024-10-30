@@ -36,7 +36,10 @@ class Logger extends BaseLogger {
         const month = String(this.currentDate.getMonth() + 1).padStart(2, '0');
         const day = String(this.currentDate.getDate()).padStart(2, '0');
 
-        const logFileName = level === LogLevel.ERROR || level === LogLevel.WARN ? 'error_warnings.log' : 'success.log';
+        const logFileName =
+            level === LogLevel.ERROR || level === LogLevel.WARN
+                ? 'error_warnings.log'
+                : 'success.log';
 
         const logPath = path.join(this.logDirectory, `${year}`, `${month}`, `${day}`);
 

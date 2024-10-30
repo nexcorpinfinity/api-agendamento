@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Request, Response, NextFunction } from 'express';
 
 import { decodeToken } from '../utils/DecodeToken';
@@ -21,7 +22,9 @@ export const authenticateToken = (requiredPermissions: string[]) => {
                 return res.status(403).json({ message: 'Forbidden or Token Invalid' });
             }
 
-            const hasPermission = requiredPermissions.some((permission) => decoded.permission.includes(permission));
+            const hasPermission = requiredPermissions.some((permission) =>
+                decoded.permission.includes(permission),
+            );
 
             if (hasPermission) {
                 return next();
