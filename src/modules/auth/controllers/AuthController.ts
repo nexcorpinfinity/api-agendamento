@@ -3,9 +3,6 @@ import { Request, Response } from 'express';
 import { ResponseHandler } from '../../../config/ResponseHTTP/ResponseHTTP';
 import { IAuthService } from '../interfaces/IAuthService';
 
-// import { IAuthController } from '../interfaces/IAuthController';
-// import { IAuthService } from '../interfaces/IAuthService';
-
 export class AuthController {
     public constructor(private readonly authService: IAuthService) {}
 

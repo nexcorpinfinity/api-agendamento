@@ -17,7 +17,10 @@ export class CorsConfig {
         return cors(corsOptions);
     }
 
-    private checkOrigin(origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void): void {
+    private checkOrigin(
+        origin: string | undefined,
+        callback: (err: Error | null, allow?: boolean) => void,
+    ): void {
         if (!origin || this.whitelist.includes(origin)) {
             callback(null, true);
         } else {
