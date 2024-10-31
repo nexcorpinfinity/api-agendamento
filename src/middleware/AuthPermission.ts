@@ -8,8 +8,6 @@ export const authenticateToken = (requiredPermissions: string[]) => {
     return (req: Request, res: Response, next: NextFunction): Response<void> | void => {
         const permissions = res.locals.user.permission;
 
-        console.log(permissions);
-
         try {
             if (permissions.includes(Permissions.Admin)) {
                 return next();

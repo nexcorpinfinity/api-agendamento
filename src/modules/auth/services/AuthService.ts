@@ -37,8 +37,6 @@ export class AuthService implements IAuthService {
 
             const { id } = getDataUser;
 
-            console.log(id);
-
             const token = await this.generateToken(
                 String(id),
                 String(getDataUser.name),
@@ -70,8 +68,6 @@ export class AuthService implements IAuthService {
             const expiration = stay_connected ? '5d' : process.env.TOKEN_EXPIRATION;
 
             const jti = uuidv4();
-
-            console.log('iduser', id);
 
             const token = jwt.sign(
                 {

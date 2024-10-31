@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 
 import { ResponseHandler } from '../../../config/ResponseHTTP/ResponseHTTP';
+import { emitConsole } from '../../../utils/ConsoleDevelopment';
 import { ISegmentController } from '../intefaces/ISegmentController';
 import { ISegmentsService } from '../intefaces/ISegmentsService';
 
@@ -21,7 +22,7 @@ export class SegmentsController implements ISegmentController {
                 'Todos segmentos retornado com sucesso!',
             );
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             return ResponseHandler.error(res, 500, 'Erro ao buscar segmentos');
         }
     }
@@ -40,7 +41,7 @@ export class SegmentsController implements ISegmentController {
 
             return ResponseHandler.success(res, 200, data, 'Segmento retornado com sucesso!');
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             return ResponseHandler.error(res, 500, 'Erro ao buscar segmento');
         }
     }
@@ -59,7 +60,7 @@ export class SegmentsController implements ISegmentController {
                 'Todos tipos de segmento retornado com sucesso!',
             );
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             return ResponseHandler.error(res, 500, 'Erro ao buscar tipos de segmento');
         }
     }
@@ -84,7 +85,7 @@ export class SegmentsController implements ISegmentController {
                 'Tipo de segmento retornado com sucesso!',
             );
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             return ResponseHandler.error(res, 500, 'Erro ao buscar tipo de segmento');
         }
     }

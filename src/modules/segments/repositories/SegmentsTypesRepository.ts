@@ -1,3 +1,4 @@
+import { emitConsole } from '../../../utils/ConsoleDevelopment';
 import { SegmentsTypesEntity } from '../entities/SegmentsTypesEntity';
 import { ISegmentsTypesRepository } from '../intefaces/ISegmentsTypesRepository';
 
@@ -15,7 +16,7 @@ export class SegmentsTypesRepository implements ISegmentsTypesRepository {
             });
             return segmentType;
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             throw new Error('Error criar segment type');
         }
     }
@@ -25,7 +26,7 @@ export class SegmentsTypesRepository implements ISegmentsTypesRepository {
             const segmentType = await this.segmentsTypeEntity.findByPk(segmentTypeId);
             return !!segmentType;
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             throw new Error('Error ao verificar segment type');
         }
     }
@@ -35,7 +36,7 @@ export class SegmentsTypesRepository implements ISegmentsTypesRepository {
             const segmentTypes = await this.segmentsTypeEntity.findAll();
             return segmentTypes;
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             throw new Error('Error ao buscar segment types');
         }
     }
@@ -50,7 +51,7 @@ export class SegmentsTypesRepository implements ISegmentsTypesRepository {
 
             return segmentType.dataValues;
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             throw new Error('Error ao buscar segment type');
         }
     }

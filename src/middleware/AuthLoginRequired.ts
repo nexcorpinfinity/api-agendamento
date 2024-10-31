@@ -7,8 +7,6 @@ import { ResponseHandler } from '../config/ResponseHTTP/ResponseHTTP';
 export default (req: Request, res: Response, next: NextFunction): Response | void => {
     const authorization: string | undefined = req.headers.authorization;
 
-    console.log(authorization);
-
     if (!authorization || !authorization.startsWith('Bearer ')) {
         return ResponseHandler.error(res, 401, 'Usuário não autenticado.');
     }
@@ -27,8 +25,6 @@ export default (req: Request, res: Response, next: NextFunction): Response | voi
 
             const { id, permission } = data as JwtPayload;
 
-            console.log(data);
-            console.log('Token válido:', { id, permission });
             res.locals.user = { id, permission };
 
             res.setHeader('Cache-Control', 'no-store');

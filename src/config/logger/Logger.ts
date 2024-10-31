@@ -49,8 +49,8 @@ class Logger extends BaseLogger {
     }
 
     public log(message: string, level: LogLevel): void {
-        const formattedMessage = this.formatMessage(message, level);
-        console.log('[LOG]', formattedMessage);
+        const formattedMessage = this.formatMessage(`${message}`, level);
+        console.log('\x1b[43m\x1b[30m%s\x1b[0m', formattedMessage);
 
         const logFilePath = this.getLogFilePath(level);
         fs.appendFileSync(logFilePath, formattedMessage + '\n');

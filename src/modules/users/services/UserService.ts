@@ -2,6 +2,7 @@
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 
+import { emitConsole } from '../../../utils/ConsoleDevelopment';
 import { IBusinessRepository } from '../../business/interface/IBusinessRepository';
 import { IBusinessSegmentsTypesRepository } from '../../business/interface/IBusinessSegmentsTypesRepository';
 import { ISegmentsTypesRepository } from '../../segments/intefaces/ISegmentsTypesRepository';
@@ -48,7 +49,7 @@ export class UserService implements IUserService {
 
             return user;
         } catch (error) {
-            console.log(error);
+            console.error(error);
             throw error;
         }
     }
@@ -93,8 +94,6 @@ export class UserService implements IUserService {
                 return userResult;
             }
 
-            console.log('idBusiness', 44);
-
             const { id } = userResult;
 
             if (userResult) {
@@ -102,7 +101,6 @@ export class UserService implements IUserService {
                     name_business,
                     String(id),
                 );
-                console.log('idBusiness', 55);
 
                 if (resultBusiness instanceof Error) {
                     return new Error('Erro ao criar comercio');
@@ -116,7 +114,6 @@ export class UserService implements IUserService {
                             idBusiness,
                             segment_type_id,
                         );
-                    console.log('idBusiness', 667);
 
                     if (createBondBusiAndSeg instanceof Error) {
                         console.error('Erro ao criar vínculo do comércio');
@@ -160,11 +157,9 @@ export class UserService implements IUserService {
                 Permissions.Admin,
             );
 
-            console.log(user);
-
             return user;
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             throw error;
         }
     }

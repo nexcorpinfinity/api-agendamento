@@ -2,6 +2,7 @@
 import { Request, Response } from 'express';
 
 import { ResponseHandler } from '../../../config/ResponseHTTP/ResponseHTTP';
+import { emitConsole } from '../../../utils/ConsoleDevelopment';
 import { IUserController } from '../interfaces/IUserController';
 import { IUserService } from '../interfaces/IUserService';
 
@@ -33,7 +34,7 @@ export class UserController implements IUserController {
 
             return ResponseHandler.success(res, 201, result, 'Usuario cliente criado com sucesso');
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             return ResponseHandler.error(res, 500);
         }
     }
@@ -55,8 +56,6 @@ export class UserController implements IUserController {
                 segment_type_id,
             );
 
-            console.log(result);
-
             if (!result) {
                 return ResponseHandler.error(res, 400, 'Erro ao usuário cliente');
             }
@@ -67,7 +66,7 @@ export class UserController implements IUserController {
 
             return ResponseHandler.success(res, 201, result, 'Usuario cliente criado com sucesso');
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             return ResponseHandler.error(res, 500);
         }
     }
@@ -96,7 +95,7 @@ export class UserController implements IUserController {
 
             return ResponseHandler.success(res, 201, result, 'Usuario cliente criado com sucesso');
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             return ResponseHandler.error(res, 500);
         }
     }

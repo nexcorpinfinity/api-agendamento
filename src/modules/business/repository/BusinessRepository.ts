@@ -1,3 +1,4 @@
+import { emitConsole } from '../../../utils/ConsoleDevelopment';
 import { BusinessEntity } from '../entities/BusinessEntity';
 import { IBusinessRepository } from '../interface/IBusinessRepository';
 
@@ -19,7 +20,7 @@ export class BusinessRepository implements IBusinessRepository {
 
             return { id, name };
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             throw new Error('Error criar business');
         }
     }

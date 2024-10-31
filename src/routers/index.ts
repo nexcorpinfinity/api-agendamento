@@ -14,6 +14,7 @@ class Routers {
     }
 
     private initializeRoutes(versionApi: string): void {
+        this.router.get(`${versionApi}/`, (req, res) => res.json('Hello World!'));
         this.router.use(`${versionApi}/auth`, authRoute);
         this.router.use(`${versionApi}/users`, usersRoute);
         this.router.use(`${versionApi}/segments`, segmentsRoute);
