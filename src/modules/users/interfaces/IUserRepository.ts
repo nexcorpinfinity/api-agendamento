@@ -14,4 +14,5 @@ export interface IUserRepository {
 
     verifyEmailExists(emailReceived: string): Promise<boolean>;
     getAllDataUser(emailReceived: string): Promise<IUser | undefined>;
+    getDataByUser(idUser: string): Promise<IUser | undefined>;
 }

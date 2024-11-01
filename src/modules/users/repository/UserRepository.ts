@@ -1,3 +1,4 @@
+import { emitConsole } from '../../../utils/ConsoleDevelopment';
 import { UserEntity } from '../entities/UserEntity';
 import { Permissions } from '../interfaces/EnumPermissions';
 import { IUser } from '../interfaces/IUser';
@@ -34,7 +35,7 @@ class UserRepository implements IUserRepository {
 
             return { id, name, email };
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             return new Error('Erro ao criar usuário');
         }
     }
@@ -49,7 +50,7 @@ class UserRepository implements IUserRepository {
 
             return !!verify;
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             throw new Error('Erro ao verificar email');
         }
     }
@@ -60,7 +61,22 @@ class UserRepository implements IUserRepository {
 
             return data?.dataValues;
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
+            throw new Error('Erro ao buscar dados do usuário');
+        }
+    }
+
+    public async getDataByUser(idUser: string): Promise<IUser | undefined> {
+        try {
+            const data = await this.userEntity.findOne({
+                where: {
+                    id: idUser,
+                },
+            });
+
+            return data?.dataValues;
+        } catch (error) {
+            emitConsole(error);
             throw new Error('Erro ao buscar dados do usuário');
         }
     }

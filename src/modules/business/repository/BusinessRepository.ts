@@ -1,3 +1,4 @@
+import { emitConsole } from '../../../utils/ConsoleDevelopment';
 import { BusinessEntity } from '../entities/BusinessEntity';
 import { IBusinessRepository } from '../interface/IBusinessRepository';
 
@@ -19,7 +20,22 @@ export class BusinessRepository implements IBusinessRepository {
 
             return { id, name };
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
+            throw new Error('Error criar business');
+        }
+    }
+
+    public async getAllBusinessByIdUser(idUser: string): Promise<BusinessEntity | null> {
+        try {
+            const data = await this.business.findOne({
+                where: {
+                    user_id: idUser,
+                },
+            });
+
+            return data?.dataValues;
+        } catch (error) {
+            emitConsole(error);
             throw new Error('Error criar business');
         }
     }

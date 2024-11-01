@@ -66,18 +66,14 @@ module.exports = {
                 },
             ]);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     },
 
     async down(queryInterface, Sequelize) {
         return queryInterface.bulkDelete('business', {
             name: {
-                [Sequelize.Op.in]: [
-                    'Lorena Designer',
-                    'Barbearia Douglas',
-                    'Manicure Amanda',
-                ],
+                [Sequelize.Op.in]: ['Lorena Designer', 'Barbearia Douglas', 'Manicure Amanda'],
             },
         });
     },

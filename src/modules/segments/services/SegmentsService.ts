@@ -1,3 +1,4 @@
+import { emitConsole } from '../../../utils/ConsoleDevelopment';
 import { SegmentsEntity } from '../entities/SegmentsEntity';
 import { SegmentsTypesEntity } from '../entities/SegmentsTypesEntity';
 import { ISegmentRepository } from '../intefaces/ISegmentRepository';
@@ -16,7 +17,7 @@ export class SegmentsService implements ISegmentsService {
 
             return segments;
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             throw new Error('Error ao buscar segmentos');
         }
     }
@@ -27,7 +28,7 @@ export class SegmentsService implements ISegmentsService {
 
             return segment;
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             throw new Error('Error ao buscar segmento');
         }
     }
@@ -37,7 +38,7 @@ export class SegmentsService implements ISegmentsService {
             const segmentsTypes = await this.segmentsTypesRepository.getSegmentTypes();
             return segmentsTypes;
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             throw new Error('Error ao buscar tipos de segmentos');
         }
     }
@@ -48,7 +49,7 @@ export class SegmentsService implements ISegmentsService {
                 await this.segmentsTypesRepository.getSegmentTypeById(idSegmentType);
             return segmentType;
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             throw new Error('Error ao buscar tipo de segmento');
         }
     }

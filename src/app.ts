@@ -41,19 +41,26 @@ export class App extends Logger implements IApp {
     private async connectionDatabase(): Promise<void> {
         try {
             await sequelizeConnection.authenticate();
-            console.log('[server]: Connection database success');
-            this.log('[server]: Connection database success', LogLevel.INFO);
+            console.log('\x1b[42m\x1b[30m%s\x1b[0m', '[server]: Connection database success.');
+            this.log('[server]: Connection database success.', LogLevel.INFO);
         } catch (err) {
-            console.error('[server]: Error connecting database', err);
-            this.log('[server]: Error connecting database', LogLevel.ERROR);
+            console.error(
+                '\x1b[41m\x1b[30m\x1b[1m%s\x1b[0m',
+                '[server]: Error connecting database.',
+                err,
+            );
+            this.log('[server]: Error connecting database.', LogLevel.ERROR);
         }
     }
 
     public server(port: number): void {
         this.app.listen(port, () => {
-            console.log(`[server]: Server is running in http://localhost:${port}`);
+            console.log(
+                '\x1b[42m\x1b[30m%s\x1b[0m',
+                `[server]: Server is running in http://localhost:${port}/api/v1`,
+            );
         });
 
-        this.log('[server]: Servidor Iniciado', LogLevel.INFO);
+        this.log('[server]: Servidor Iniciado.', LogLevel.INFO);
     }
 }

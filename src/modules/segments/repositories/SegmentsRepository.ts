@@ -1,3 +1,4 @@
+import { emitConsole } from '../../../utils/ConsoleDevelopment';
 import { SegmentsEntity } from '../entities/SegmentsEntity';
 
 export class SegmentsRepository {
@@ -10,7 +11,7 @@ export class SegmentsRepository {
             });
             return segment;
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             throw new Error('Error criar segment');
         }
     }
@@ -19,7 +20,7 @@ export class SegmentsRepository {
             const segments = await this.segmentsEntity.findAll();
             return segments;
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             throw new Error('Error buscar segmentos');
         }
     }
@@ -34,7 +35,7 @@ export class SegmentsRepository {
 
             return segment.dataValues;
         } catch (error) {
-            console.log(error);
+            emitConsole(error);
             throw new Error('Error buscar segmento');
         }
     }

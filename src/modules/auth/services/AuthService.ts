@@ -22,8 +22,6 @@ export class AuthService implements IAuthService {
 
             const getDataUser = await this.userRepository.getAllDataUser(email);
 
-            console.log(getDataUser);
-
             if (getDataUser === undefined || getDataUser === null) {
                 throw new Error('Erro ao trazer dados do usuário');
             }
@@ -37,8 +35,10 @@ export class AuthService implements IAuthService {
                 throw new Error('Senha inválida');
             }
 
+            const { id } = getDataUser;
+
             const token = await this.generateToken(
-                Number(getDataUser.id),
+                String(id),
                 String(getDataUser.name),
                 String(getDataUser.permission),
                 Boolean(stay_connected),
@@ -59,7 +59,7 @@ export class AuthService implements IAuthService {
     }
 
     private async generateToken(
-        id: number,
+        id: string,
         name: string,
         permission: string,
         stay_connected: boolean,
@@ -68,7 +68,6 @@ export class AuthService implements IAuthService {
             const expiration = stay_connected ? '5d' : process.env.TOKEN_EXPIRATION;
 
             const jti = uuidv4();
-            console.log(jti);
 
             const token = jwt.sign(
                 {
