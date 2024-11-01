@@ -4,7 +4,7 @@ import { ResponseHandler } from '../config/ResponseHTTP/ResponseHTTP';
 import { Permissions } from '../modules/users/interfaces/EnumPermissions';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const authenticateToken = (requiredPermissions: string[]) => {
+export const authPermission = (requiredPermissions: string[]) => {
     return (req: Request, res: Response, next: NextFunction): Response<void> | void => {
         const permissions = res.locals.user.permission;
 

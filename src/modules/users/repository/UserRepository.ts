@@ -65,5 +65,20 @@ class UserRepository implements IUserRepository {
             throw new Error('Erro ao buscar dados do usuário');
         }
     }
+
+    public async getDataByUser(idUser: string): Promise<IUser | undefined> {
+        try {
+            const data = await this.userEntity.findOne({
+                where: {
+                    id: idUser,
+                },
+            });
+
+            return data?.dataValues;
+        } catch (error) {
+            emitConsole(error);
+            throw new Error('Erro ao buscar dados do usuário');
+        }
+    }
 }
 export { UserRepository };

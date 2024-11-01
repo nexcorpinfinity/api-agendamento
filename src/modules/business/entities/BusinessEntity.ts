@@ -36,7 +36,7 @@ BusinessEntity.init(
             type: DataTypes.STRING,
             allowNull: true,
         },
-        cep: {
+        zip: {
             type: DataTypes.STRING,
             allowNull: true,
             validate: {
