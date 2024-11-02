@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import { authRoute } from '../modules/auth/routes/authRoute';
 import { businessRouter } from '../modules/business/routes/businessRouter';
+import { proceduresRouter } from '../modules/procedures/router/ProceduresRouter';
 import { segmentsRoute } from '../modules/segments/router/segmentsRouter';
 import { usersRoute } from '../modules/users/routes/usersRoute';
 
@@ -19,6 +20,7 @@ class Routers {
         this.router.use(`${versionApi}/users`, usersRoute);
         this.router.use(`${versionApi}/segments`, segmentsRoute);
         this.router.use(`${versionApi}/business`, businessRouter);
+        this.router.use(`${versionApi}/procedures`, proceduresRouter);
     }
 
     public getRouter(): Router {

@@ -23,9 +23,9 @@ export default (req: Request, res: Response, next: NextFunction): Response | voi
                 },
             );
 
-            const { id, permission } = data as JwtPayload;
+            const { id, businessId, permission } = data as JwtPayload;
 
-            res.locals.user = { id, permission };
+            res.locals.user = { id, businessId, permission };
 
             res.setHeader('Cache-Control', 'no-store');
             res.setHeader('Pragma', 'no-cache');

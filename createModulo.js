@@ -72,7 +72,21 @@ function createModule(moduleName) {
 
     createFile(
         path.join(baseDir, 'entities', `${capitalize(moduleName)}Entity.ts`),
-        `export class ${capitalize(moduleName)}Entity {}\n`
+        `import { Model, DataTypes } from 'sequelize';\n\n` +
+        `import { sequelizeConnection } from '../../../config/db/database';\n\n` +
+        `class ${capitalize(moduleName)}Entity extends Model {}\n\n` +
+        `${capitalize(moduleName)}Entity.init({\n` +
+        `    id: {\n` +
+        `        type: DataTypes.UUID,\n` +
+        `        defaultValue: DataTypes.UUIDV4,\n` +
+        `        primaryKey: true,\n` +
+        `    },\n` +
+        `}, {\n` +
+        `    tableName: '${moduleName}',\n` +
+        `    sequelize: sequelizeConnection,\n` +
+        `    underscored: true,\n` +
+        `});\n\n` +
+        `export { ${capitalize(moduleName)}Entity };`
     );
 
     createFile(
