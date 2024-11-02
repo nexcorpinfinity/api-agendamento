@@ -14,8 +14,6 @@ const userRepository = new UserRepository();
 // const businessService = new BusinessService(businessRepository, userRepository);
 const businessService = new BusinessService(businessRepository, userRepository);
 
-console.log(businessService);
-
 const businessController = new BusinessController(businessService);
 
 businessRouter.get('/profile', AuthLoginRequired, (req, res) =>

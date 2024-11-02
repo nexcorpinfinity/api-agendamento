@@ -2,11 +2,15 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 
+import { IBusinessRepository } from '../../business/interface/IBusinessRepository';
 import { IUserRepository } from '../../users/interfaces/IUserRepository';
 import { IAuthService } from '../interfaces/IAuthService';
 
 export class AuthService implements IAuthService {
-    public constructor(private userRepository: IUserRepository) {}
+    public constructor(
+        private userRepository: IUserRepository,
+        private readonly businessRepository: IBusinessRepository,
+    ) {}
 
     public async auth(
         email: string,
@@ -37,9 +41,12 @@ export class AuthService implements IAuthService {
 
             const { id } = getDataUser;
 
+            const getIdBusiness = await this.businessRepository.getIdBusinessWithIdUser(String(id));
+
             const token = await this.generateToken(
                 String(id),
                 String(getDataUser.name),
+                String(getIdBusiness),
                 String(getDataUser.permission),
                 Boolean(stay_connected),
             );
@@ -61,6 +68,7 @@ export class AuthService implements IAuthService {
     private async generateToken(
         id: string,
         name: string,
+        businessId: string,
         permission: string,
         stay_connected: boolean,
     ): Promise<string | Error> {
@@ -72,6 +80,7 @@ export class AuthService implements IAuthService {
             const token = jwt.sign(
                 {
                     id,
+                    businessId,
                     name,
                     permission,
                     jti,
