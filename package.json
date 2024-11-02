@@ -9,6 +9,7 @@
         "test": "jest",
         "test:silent": "jest --watchAll --noStackTrace",
         "report": "jest --coverage --watchAll --noStackTrace",
+        "modulo-create":"echo 'Escreva o nome do modulo:' && read nome && node createModulo.js $nome",
         "migration-create": "echo 'Escreva o nome da migration:' && read nome && npx sequelize-cli migration:generate --name $nome",
         "migration-all": "npx sequelize-cli db:migrate",
         "migration-undo": "npx sequelize-cli db:migrate:undo:all",
