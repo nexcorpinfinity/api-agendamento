@@ -73,18 +73,29 @@ export class ProcedureCatergoryRepository implements IProceduresCategoryReposito
         }
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-function-return-type
-    public async updateProcedureCategory(procedureCategoryId: string) {
-        // try {
-        //     await this.proceduresCategoryEntity.update(updateData, {
-        //         where: { id: procedureId },
-        //     });
-        //     const updatedProcedure = await this.proceduresEntity.findByPk(procedureId);
-        //     return updatedProcedure;
-        // } catch (error) {
-        //     console.log(error);
-        //     throw new Error('Erro ao editar procedimentos');
-        // }
+    public async editProcedureCategory(
+        procedureCategoryId: string,
+        name: string,
+    ): Promise<ProcedureCategoryEntity | null> {
+        try {
+            await this.proceduresCategoryEntity.update(
+                {
+                    name,
+                },
+                {
+                    where: {
+                        id: procedureCategoryId,
+                    },
+                },
+            );
+            const updatedProcedure =
+                await this.proceduresCategoryEntity.findByPk(procedureCategoryId);
+
+            return updatedProcedure;
+        } catch (error) {
+            emitConsole(error);
+            throw new Error('Erro ao editar categoria de procedimentos');
+        }
     }
 
     public async deleteProcedureCategory(procedureCategoryId: string): Promise<boolean> {

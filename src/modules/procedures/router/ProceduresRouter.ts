@@ -19,6 +19,14 @@ const proceduresController = new ProceduresController(proceduresService);
 
 const proceduresMiddlewares = new ProceduresMiddleware();
 
+proceduresRouter.get('/:business', (req, res) =>
+    proceduresController.getallAndOneProcedures(req, res),
+);
+
+proceduresRouter.get('/category/:business', (req, res) =>
+    proceduresController.getAllCategoriesForProcedure(req, res),
+);
+
 proceduresRouter.post(
     '/create',
     AuthLoginRequired,
@@ -42,6 +50,13 @@ proceduresRouter.put(
     (req, res) => proceduresController.editOneProcedure(req, res),
 );
 
+proceduresRouter.put(
+    '/category/edit/:id',
+    AuthLoginRequired,
+    authPermission([Permissions.Costumer]),
+    (req, res) => proceduresController.editOneCategoryProcedure(req, res),
+);
+
 proceduresRouter.delete(
     '/delete/:id',
     AuthLoginRequired,
@@ -49,8 +64,11 @@ proceduresRouter.delete(
     (req, res) => proceduresController.deleteOneProcedure(req, res),
 );
 
-proceduresRouter.get('/:business', (req, res) =>
-    proceduresController.getallAndOneProcedures(req, res),
+proceduresRouter.delete(
+    '/delete/category/:id',
+    AuthLoginRequired,
+    authPermission([Permissions.Costumer]),
+    (req, res) => proceduresController.deleteOneCategoryProcedure(req, res),
 );
 
 export { proceduresRouter };

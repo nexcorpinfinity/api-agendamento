@@ -162,4 +162,82 @@ export class ProceduresController implements IProceduresController {
             return ResponseHandler.error(res, 400, error.message);
         }
     }
+
+    public async getAllCategoriesForProcedure(
+        req: Request,
+        res: Response,
+    ): Promise<Response<string, Record<string, string>>> {
+        try {
+            const businessId = req.params.business;
+
+            const categories =
+                await this.proceduresService.gellAllProceduresCategoryByBusiness(businessId);
+
+            if (categories instanceof Error) {
+                return ResponseHandler.error(res, 400, categories.message);
+            }
+
+            return ResponseHandler.success(
+                res,
+                200,
+                categories,
+                'Categorias retornadas com sucesso.',
+            );
+        } catch (error: any) {
+            console.log(error);
+            return ResponseHandler.error(res, 400, error.message);
+        }
+    }
+
+    public async editOneCategoryProcedure(
+        req: Request,
+        res: Response,
+    ): Promise<Response<string, Record<string, string>>> {
+        try {
+            const { id } = req.params;
+
+            const { name } = req.body;
+
+            const updated = await this.proceduresService.updateProcedureCategory(String(name), id);
+
+            if (updated instanceof Error) {
+                return ResponseHandler.error(res, 400, updated.message);
+            }
+
+            console.log(updated);
+
+            return ResponseHandler.success(
+                res,
+                200,
+                updated,
+                'Procedimento atualizado com sucesso.',
+            );
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            console.log(error);
+            return ResponseHandler.error(res, 400, error.message);
+        }
+    }
+
+    public async deleteOneCategoryProcedure(
+        req: Request,
+        res: Response,
+    ): Promise<Response<string, Record<string, string>>> {
+        try {
+            const { id } = req.params;
+
+            const deleted = await this.proceduresService.deleteProcedureCategory(id);
+
+            if (deleted instanceof Error) {
+                return ResponseHandler.error(res, 400, deleted.message);
+            }
+
+            console.log(deleted);
+
+            return ResponseHandler.success(res, 200, deleted, 'Procedimento deletado com sucesso.');
+        } catch (error: any) {
+            console.log(error);
+            return ResponseHandler.error(res, 400, error.message);
+        }
+    }
 }

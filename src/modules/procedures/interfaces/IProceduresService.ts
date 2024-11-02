@@ -23,4 +23,10 @@ export interface IProceduresService {
         name: string,
         business_id: string,
     ): Promise<ProcedureCategoryEntity | Error>;
+    gellAllProceduresCategoryByBusiness(idBusiness: string): Promise<ProcedureCategoryEntity[]>;
+    deleteProcedureCategory(idProcedureCategory: string): Promise<boolean | Error>;
+    updateProcedureCategory(
+        name: string | undefined,
+        idProcedureCategory: string,
+    ): Promise<ProcedureCategoryEntity | Error | boolean>;
 }
