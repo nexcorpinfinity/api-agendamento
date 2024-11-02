@@ -39,4 +39,19 @@ export class BusinessRepository implements IBusinessRepository {
             throw new Error('Error criar business');
         }
     }
+
+    public async getIdBusinessWithIdUser(idUser: string): Promise<string | Error> {
+        try {
+            const data = await this.business.findOne({
+                where: {
+                    user_id: idUser,
+                },
+            });
+
+            return data?.dataValues.id;
+        } catch (error) {
+            emitConsole(error);
+            throw new Error('Error ao buscar Business ou business não existe.');
+        }
+    }
 }

@@ -6,4 +6,5 @@ export interface IBusinessRepository {
         idUser: string,
     ): Promise<{ id: string; name: string } | Error>;
     getAllBusinessByIdUser(idUser: string): Promise<BusinessEntity | null>;
+    getIdBusinessWithIdUser(idUser: string): Promise<string | Error>;
 }
