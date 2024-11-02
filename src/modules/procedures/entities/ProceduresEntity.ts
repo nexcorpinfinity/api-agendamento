@@ -38,7 +38,7 @@ ProceduresEntity.init(
             type: DataTypes.UUID,
             allowNull: true,
             references: {
-                model: ProcedureCategoryEntity,
+                model: 'procedures_categories',
                 key: 'id',
             },
         },

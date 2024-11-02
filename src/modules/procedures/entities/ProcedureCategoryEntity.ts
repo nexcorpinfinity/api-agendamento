@@ -1,8 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
 
 import { sequelizeConnection } from '../../../config/db/database';
-
-import { ProceduresEntity } from './ProceduresEntity';
+import { BusinessEntity } from '../../business/entities/BusinessEntity';
 
 class ProcedureCategoryEntity extends Model {}
 
@@ -14,20 +13,28 @@ ProcedureCategoryEntity.init(
             primaryKey: true,
         },
         name: {
-            type: DataTypes.STRING(50),
+            type: DataTypes.STRING,
             allowNull: false,
+        },
+        business_id: {
+            type: DataTypes.UUID,
+            allowNull: false,
+            references: {
+                model: BusinessEntity,
+                key: 'id',
+            },
         },
     },
     {
-        tableName: 'procedures',
+        tableName: 'procedures_categories',
         sequelize: sequelizeConnection,
         underscored: true,
     },
 );
 
-ProcedureCategoryEntity.hasMany(ProceduresEntity, {
-    foreignKey: 'procedures_categories_id',
-    as: 'procedures',
+ProcedureCategoryEntity.belongsTo(BusinessEntity, {
+    foreignKey: 'business_id',
+    as: 'business',
 });
 
 export { ProcedureCategoryEntity };

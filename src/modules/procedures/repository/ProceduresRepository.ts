@@ -1,6 +1,7 @@
 import { emitConsole } from '../../../utils/ConsoleDevelopment';
 import { ProceduresEntity } from '../entities/ProceduresEntity';
 import { IProceduresRepository } from '../interfaces/IProceduresRepository';
+import { IUpdateProcedureData } from '../interfaces/IUpdateProcedureData';
 
 export class ProceduresRepository implements IProceduresRepository {
     public constructor(private readonly proceduresEntity = ProceduresEntity) {}
@@ -40,7 +41,22 @@ export class ProceduresRepository implements IProceduresRepository {
             return !!data;
         } catch (error) {
             emitConsole(error);
-            throw new Error('Erro ao criar usuário');
+            throw new Error('Erro ao verificar se existe procedimento por nome');
+        }
+    }
+
+    public async verifyExistsProcedureById(idProcedure: string): Promise<boolean> {
+        try {
+            const data = await this.proceduresEntity.findOne({
+                where: {
+                    id: idProcedure,
+                },
+            });
+
+            return !!data;
+        } catch (error) {
+            emitConsole(error);
+            throw new Error('Erro ao verificar se existe procedimento por ID');
         }
     }
 
@@ -59,29 +75,34 @@ export class ProceduresRepository implements IProceduresRepository {
         }
     }
 
-    public async editProcedureByBusiness(
+    public async updateProcedure(
         procedureId: string,
-        name: string,
-        description: string,
-        duration: number,
-        price: number,
-    ) {
+        updateData: Partial<IUpdateProcedureData>,
+    ): Promise<ProceduresEntity | null> {
         try {
-            const updatedProcedure = await this.proceduresEntity.update(
-                {
-                    name: name,
-                    description: description,
-                    duration: duration,
-                    price: price,
-                },
-                {
-                    where: { id: procedureId },
-                },
-            );
+            await this.proceduresEntity.update(updateData, {
+                where: { id: procedureId },
+            });
+
+            const updatedProcedure = await this.proceduresEntity.findByPk(procedureId);
+
             return updatedProcedure;
         } catch (error) {
-            emitConsole(error);
-            throw new Error('Erro ao editar procedimento');
+            console.log(error);
+            throw new Error('Erro ao editar procedimentos');
+        }
+    }
+
+    public async deleteProcedure(procedureId: string): Promise<boolean> {
+        try {
+            const bool = await this.proceduresEntity.destroy({
+                where: { id: procedureId },
+            });
+
+            return !!bool;
+        } catch (error) {
+            console.log(error);
+            throw new Error('Erro ao deletar procedimentos');
         }
     }
 }

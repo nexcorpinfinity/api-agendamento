@@ -12,6 +12,16 @@ module.exports = {
                 type: Sequelize.STRING(50),
                 allowNull: false,
             },
+            business_id: {
+                type: Sequelize.UUID,
+                allowNull: false,
+                references: {
+                    model: 'business',
+                    key: 'id',
+                },
+                onUpdate: 'CASCADE',
+                onDelete: 'CASCADE',
+            },
             created_at: {
                 type: Sequelize.DATE,
                 allowNull: false,

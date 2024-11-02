@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
 
 import { ResponseHandler } from '../../../config/ResponseHTTP/ResponseHTTP';
@@ -7,26 +8,44 @@ import { IProceduresService } from '../interfaces/IProceduresService';
 export class ProceduresController implements IProceduresController {
     public constructor(private readonly proceduresService: IProceduresService) {}
 
-    public getallAndOneProcedures(req: Request, res: Response): void {
-        // para filtrar um procedimento por id pegar pelo req.query tipo no front na url vai ser /procedures?id=123123123
-        // aqui no metoto pega por const {id} req.query;
-        //
-        this.proceduresService;
-        res.json('ok');
+    public async getallAndOneProcedures(
+        req: Request,
+        res: Response,
+    ): Promise<Response<string, Record<string, string>>> {
+        try {
+            const businessId = req.params.business;
+
+            const gellAll = await this.proceduresService.gellAllProceduresByBusiness(businessId);
+
+            return ResponseHandler.success(
+                res,
+                200,
+                gellAll,
+                'Todos procedimentos retornados com sucesso',
+            );
+        } catch (error: any) {
+            console.log(error);
+            return ResponseHandler.error(res, 400, error.message);
+        }
     }
 
-    public async createOneProcedure(req: Request, res: Response) {
+    public async createOneProcedure(
+        req: Request,
+        res: Response,
+    ): Promise<Response<string, Record<string, string>>> {
         try {
             const { name, description, duration, price } = req.body;
 
             const { businessId } = res.locals.user;
 
-            console.log('name', name);
-            console.log('description', description);
-            console.log('duration', duration);
-            console.log('price', price);
-
-            console.log('business_id', businessId);
+            const priceFixed = Number(price).toFixed(2);
+            if (price.toString() !== priceFixed) {
+                return ResponseHandler.error(
+                    res,
+                    400,
+                    'O preço deve ter no máximo 2 casas decimais.',
+                );
+            }
 
             const created = await this.proceduresService.createdNewProcedure(
                 name,
@@ -52,24 +71,95 @@ export class ProceduresController implements IProceduresController {
         }
     }
 
-    public editOneProcedure(req: Request, res: Response): void {
-        const { id } = req.params;
-        const { name, description, duration, price, business_id } = req.body;
+    public async editOneProcedure(
+        req: Request,
+        res: Response,
+    ): Promise<Response<string, Record<string, string>>> {
+        try {
+            const idProcedure = req.params.id;
 
-        console.log(id, name, description, duration, price, business_id);
+            if (!idProcedure) {
+                ResponseHandler.error(res, 400, 'Id não informado');
+            }
 
-        // this.proceduresService.editProcedure(id, name, description, duration, price, business_id);
+            const { name, description, duration, price, procedures_categories_id } = req.body;
 
-        res.json('ok');
+            // console.log(idProcedure, name, description, duration, price, procedures_categories_id);
+
+            const updated = await this.proceduresService.updateProcedure(
+                String(name),
+                String(description),
+                Number(duration),
+                String(price),
+                String(idProcedure),
+                String(procedures_categories_id),
+            );
+
+            if (updated instanceof Error) {
+                return ResponseHandler.error(res, 400, updated.message);
+            }
+
+            console.log(updated);
+
+            return ResponseHandler.success(
+                res,
+                200,
+                updated,
+                'Procedimento atualizado com sucesso.',
+            );
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            console.log(error);
+            return ResponseHandler.error(res, 400, error.message);
+        }
     }
 
-    public deleteOneProcedure(req: Request, res: Response): void {
-        const { id } = req.params;
+    public async deleteOneProcedure(
+        req: Request,
+        res: Response,
+    ): Promise<Response<string, Record<string, string>>> {
+        try {
+            const { id } = req.params;
 
-        console.log(id);
+            console.log(id);
 
-        // this.proceduresService.deleteProcedure(id);
+            const deleted = await this.proceduresService.deleteProcedure(id);
 
-        res.json('ok');
+            if (deleted instanceof Error) {
+                return ResponseHandler.error(res, 400, deleted.message);
+            }
+
+            console.log(deleted);
+
+            return ResponseHandler.success(res, 200, deleted, 'Procedimento deletado com sucesso.');
+        } catch (error: any) {
+            console.log(error);
+            return ResponseHandler.error(res, 400, error.message);
+        }
+    }
+
+    public async createCategoryForProcedure(
+        req: Request,
+        res: Response,
+    ): Promise<Response<string, Record<string, string>>> {
+        try {
+            const { name } = req.body;
+
+            const { businessId } = res.locals.user;
+            console.log(businessId, name);
+
+            const created = await this.proceduresService.createdNewProcedureCategory(
+                String(name),
+                String(businessId),
+            );
+            if (created instanceof Error) {
+                return ResponseHandler.error(res, 400, created.message);
+            }
+
+            return ResponseHandler.success(res, 200, created, 'Categoria criada com sucesso.');
+        } catch (error: any) {
+            console.log(error);
+            return ResponseHandler.error(res, 400, error.message);
+        }
     }
 }
