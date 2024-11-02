@@ -26,7 +26,17 @@ module.exports = {
             },
             photo: {
                 type: Sequelize.STRING(150),
-                allowNull: false,
+                allowNull: true,
+            },
+            procedures_categories_id: {
+                type: Sequelize.UUID,
+                allowNull: true,
+                references: {
+                    model: 'procedures_categories',
+                    key: 'id',
+                },
+                onUpdate: 'CASCADE',
+                onDelete: 'CASCADE',
             },
             business_id: {
                 type: Sequelize.UUID,

@@ -1,6 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
 
 import { sequelizeConnection } from '../../../config/db/database';
+import { ProceduresEntity } from '../../procedures/entities/ProceduresEntity';
 import { UserEntity } from '../../users/entities/UserEntity';
 
 class BusinessEntity extends Model {}
@@ -70,5 +71,14 @@ UserEntity.hasOne(BusinessEntity, {
     onUpdate: 'CASCADE',
 });
 BusinessEntity.belongsTo(UserEntity, { foreignKey: 'user_id' });
+
+BusinessEntity.hasMany(ProceduresEntity, {
+    foreignKey: 'business_id',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+});
+ProceduresEntity.belongsTo(BusinessEntity, {
+    foreignKey: 'business_id',
+});
 
 export { BusinessEntity };
