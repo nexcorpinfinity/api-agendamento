@@ -31,9 +31,11 @@ export class SegmentsTypesRepository implements ISegmentsTypesRepository {
         }
     }
 
-    public async getSegmentTypes(): Promise<SegmentsTypesEntity[] | Error> {
+    public async getSegmentTypes(segment_id: string): Promise<SegmentsTypesEntity[] | Error> {
         try {
-            const segmentTypes = await this.segmentsTypeEntity.findAll();
+            const segmentTypes = await this.segmentsTypeEntity.findAll({
+                where: { segment_id: segment_id },
+            });
             return segmentTypes;
         } catch (error) {
             emitConsole(error);
