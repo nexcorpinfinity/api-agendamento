@@ -163,4 +163,71 @@ export class ProceduresService implements IProceduresService {
             throw new Error(error.message);
         }
     }
+
+    public async gellAllProceduresCategoryByBusiness(
+        idBusiness: string,
+    ): Promise<ProcedureCategoryEntity[]> {
+        try {
+            const procedures =
+                await this.proceduresCategoryRepository.getAllProceduresCategoryByBusiness(
+                    idBusiness,
+                );
+
+            return procedures;
+        } catch (error: any) {
+            console.log(error);
+            throw new Error(error.message);
+        }
+    }
+
+    public async updateProcedureCategory(
+        name: string | undefined,
+        idProcedureCategory: string,
+    ): Promise<ProcedureCategoryEntity | Error | boolean> {
+        try {
+            const existingProcedure =
+                await this.proceduresCategoryRepository.verifyExistsProcedureCategoryById(
+                    idProcedureCategory,
+                );
+            if (!existingProcedure) {
+                return new Error('Procedimento não encontrado');
+            }
+
+            if (!name || name.trim() === '') {
+                return new Error('Nome do procedimento não pode estar vazio');
+            }
+
+            const updatedProcedure = await this.proceduresCategoryRepository.editProcedureCategory(
+                idProcedureCategory,
+                String(name),
+            );
+
+            if (!updatedProcedure) {
+                return new Error('Erro ao atualizar o procedimento, não foi encontrado.');
+            }
+
+            return updatedProcedure;
+        } catch (error: any) {
+            console.error(error);
+            throw new Error('Erro ao atualizar o procedimento');
+        }
+    }
+
+    public async deleteProcedureCategory(idProcedureCategory: string): Promise<boolean | Error> {
+        try {
+            const verifyExist =
+                await this.proceduresCategoryRepository.verifyExistsProcedureCategoryById(
+                    idProcedureCategory,
+                );
+
+            if (!verifyExist) {
+                return new Error('Categoria não encontrado');
+            }
+
+            return this.proceduresCategoryRepository.deleteProcedureCategory(idProcedureCategory);
+        } catch (error: any) {
+            console.log(error);
+            throw new Error(error.message);
+        }
+    }
 }

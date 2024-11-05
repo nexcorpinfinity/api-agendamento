@@ -51,7 +51,9 @@ export class SegmentsController implements ISegmentController {
         res: Response,
     ): Promise<Response<string[], Record<string, string>>> {
         try {
-            const data = await this.segmentsService.getAllSegmentsTypes();
+            const { segment_id } = req.query;
+
+            const data = await this.segmentsService.getAllSegmentsTypes(String(segment_id));
 
             return ResponseHandler.success(
                 res,

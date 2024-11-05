@@ -26,7 +26,7 @@ UserEntity.init(
         },
         password: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         photo: {
             type: DataTypes.STRING,
@@ -34,7 +34,7 @@ UserEntity.init(
         },
         number_phone: {
             type: DataTypes.STRING(15),
-            allowNull: false,
+            allowNull: true,
         },
         permission: {
             type: DataTypes.ENUM('admin', 'costumer', 'client'),

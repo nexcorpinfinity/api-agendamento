@@ -15,12 +15,12 @@ class UserRepository implements IUserRepository {
         received_number_phone: string,
         received_api_key: string,
         received_permission: Permissions = Permissions.Client,
-    ): Promise<{ id: string; name: string; email: string } | Error> {
+    ): Promise<{ id: string; name: string; email: string; permission: string } | Error> {
         try {
             const user = await this.userEntity.create({
                 name: received_name,
                 email: received_email,
-                password: received_password,
+                password: received_password ?? null,
                 permission: received_permission,
                 photo: received_photo ?? null,
                 number_phone: received_number_phone ?? null,
@@ -32,11 +32,27 @@ class UserRepository implements IUserRepository {
             const id = userData.id ?? '';
             const name = userData.name ?? '';
             const email = userData.email ?? '';
+            const permission = userData.permission ?? '';
 
-            return { id, name, email };
+            return { id, name, email, permission };
         } catch (error) {
             emitConsole(error);
             return new Error('Erro ao criar usuário');
+        }
+    }
+
+    public async findByEmail(emailReceived: string): Promise<IUser | undefined> {
+        try {
+            const user = await this.userEntity.findOne({
+                where: {
+                    email: emailReceived,
+                },
+            });
+
+            return user?.dataValues;
+        } catch (error) {
+            emitConsole(error);
+            throw new Error('Erro ao buscar usuário');
         }
     }
 

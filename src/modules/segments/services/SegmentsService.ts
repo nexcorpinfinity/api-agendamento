@@ -33,9 +33,9 @@ export class SegmentsService implements ISegmentsService {
         }
     }
 
-    public async getAllSegmentsTypes(): Promise<Error | SegmentsTypesEntity[]> {
+    public async getAllSegmentsTypes(segment_id: string): Promise<Error | SegmentsTypesEntity[]> {
         try {
-            const segmentsTypes = await this.segmentsTypesRepository.getSegmentTypes();
+            const segmentsTypes = await this.segmentsTypesRepository.getSegmentTypes(segment_id);
             return segmentsTypes;
         } catch (error) {
             emitConsole(error);
