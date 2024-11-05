@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import express, { Express } from 'express';
 // import helmet from 'helmet';
 import morgan from 'morgan';
+import passport from 'passport';
 
 import { CorsConfig } from './config/cors/CorsConfig';
 import { sequelizeConnection } from './config/db/database';
@@ -35,6 +36,7 @@ export class App extends Logger implements IApp {
         this.app.use(morgan('dev'));
         this.app.use(express.urlencoded({ extended: true }));
         this.app.use(express.json());
+        this.app.use(passport.initialize());
         this.app.use(this.router.getRouter());
     }
 

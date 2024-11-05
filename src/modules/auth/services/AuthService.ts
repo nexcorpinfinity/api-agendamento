@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 
 import { IBusinessRepository } from '../../business/interface/IBusinessRepository';
+import { Permissions } from '../../users/interfaces/EnumPermissions';
 import { IUserRepository } from '../../users/interfaces/IUserRepository';
 import { IAuthService } from '../interfaces/IAuthService';
 
@@ -58,6 +59,146 @@ export class AuthService implements IAuthService {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public async authWithGoogle(profile: any, state: string): Promise<string | Error> {
+        try {
+            if (typeof profile === 'string') {
+                profile = JSON.parse(profile);
+            }
+
+            // console.log('authWithGOogle', profile);
+
+            const { name, picture, email } = profile;
+
+            // console.log('idgoogle', profile.sub);
+
+            const existingUser = await this.userRepository.findByEmail(profile.email);
+
+            // console.log('existingUser', existingUser);
+
+            const apiKey = this.generateApiKey();
+
+            if (!existingUser) {
+                // Verifica se existingUser é undefined ou null
+                if (state === 'client') {
+                    const newUser = await this.userRepository.createUser(
+                        name,
+                        email,
+                        null,
+                        picture,
+                        null,
+                        apiKey,
+                        Permissions.Client,
+                    );
+
+                    console.log('newUser', newUser);
+                    if (newUser instanceof Error) {
+                        return newUser;
+                    }
+
+                    const { id, name: nameNew, permission } = newUser;
+
+                    // Token de primerio cadastro no front precisa validar para pedir um numero de celular e uma senha
+                    return jwt.sign(
+                        {
+                            id: id,
+                            businessId: null,
+                            name: nameNew,
+                            permission: permission,
+                            jti: uuidv4(),
+                            setNewPhoneNumber: true,
+                            setNewPass: true,
+                        },
+                        process.env.TOKEN_SECRET as string,
+                        {
+                            expiresIn: '1d',
+                        },
+                    );
+                } else if (state === 'business') {
+                    const newUser = await this.userRepository.createUser(
+                        name,
+                        email,
+                        null,
+                        picture,
+                        null,
+                        apiKey,
+                        Permissions.Costumer,
+                    );
+
+                    if (newUser instanceof Error) {
+                        return newUser;
+                    }
+
+                    const { id, name: nameNew, permission } = newUser;
+
+                    //Token de primerio cadastro n0 front precisa validar para pedir uma senha, um numero de celular e o nome do comecio
+                    return jwt.sign(
+                        {
+                            id: id,
+                            businessId: null,
+                            name: nameNew,
+                            permission: permission,
+                            jti: uuidv4(),
+                            setNewPhoneNumber: true,
+                            setNewPass: true,
+                            setNameBusiness: true,
+                        },
+                        process.env.TOKEN_SECRET as string,
+                        {
+                            expiresIn: '1d',
+                        },
+                    );
+                }
+            } else {
+                if (existingUser instanceof Error) {
+                    return existingUser;
+                }
+
+                const { id, name, permission } = existingUser;
+                console.log(id, name, permission);
+
+                if (permission === Permissions.Costumer) {
+                    const getIdBusiness = await this.businessRepository.getIdBusinessWithIdUser(
+                        String(id),
+                    );
+
+                    // console.log('getIdBusiness', getIdBusiness);
+
+                    if (getIdBusiness instanceof Error) {
+                        return getIdBusiness;
+                    }
+
+                    return this.generateToken(
+                        String(id),
+                        String(name),
+                        String(getIdBusiness),
+                        String(permission),
+                        true,
+                    );
+                } else if (permission === Permissions.Client) {
+                    return this.generateToken(
+                        String(id),
+                        String(name),
+                        null,
+                        String(permission),
+                        true,
+                    );
+                } else if (permission === Permissions.Admin) {
+                    return this.generateToken(
+                        String(id),
+                        String(name),
+                        null,
+                        String(permission),
+                        true,
+                    );
+                }
+            }
+            return new Error('Usuário não encontrado ou operação inválida');
+        } catch (error) {
+            return new Error('Erro ao autenticar com Google');
+        }
+    }
+
     private async verifyPasswordAndCompare(
         password: string,
         hashPassword: string,
@@ -68,7 +209,7 @@ export class AuthService implements IAuthService {
     private async generateToken(
         id: string,
         name: string,
-        businessId: string,
+        businessId: string | null,
         permission: string,
         stay_connected: boolean,
     ): Promise<string | Error> {
@@ -95,5 +236,9 @@ export class AuthService implements IAuthService {
         } catch (error) {
             return new Error('Erro ao gerar token');
         }
+    }
+
+    private generateApiKey(): string {
+        return uuidv4();
     }
 }
