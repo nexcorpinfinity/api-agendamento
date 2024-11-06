@@ -18,6 +18,9 @@ const authController = new AuthController(authService);
 
 configurePassport();
 
+// rota de login normal
+authRoute.post('/', (req, res) => authController.auth(req, res));
+
 authRoute.get('/google', (req, res, next) => {
     const accountType = (req.query.accountType as string) || 'client';
     passport.authenticate('google', {
@@ -26,10 +29,17 @@ authRoute.get('/google', (req, res, next) => {
     })(req, res, next);
 });
 
-authRoute.get('/google/callback', passport.authenticate('google', { session: false }), (req, res) =>
-    authController.authWithGoogle(req, res),
+authRoute.get(
+    '/google/callback',
+    (req, res, next) => {
+        // caso o usuario começa fazer login e cancela, ele redireciona para essa rota q seria a  home / do front
+        if (req.query.error === 'access_denied') {
+            return res.redirect(`${process.env.FRONT_END}?error=access_denied`);
+        }
+        return next();
+    },
+    passport.authenticate('google', { session: false }),
+    (req, res) => authController.authWithGoogle(req, res),
 );
-
-authRoute.post('/', (req, res) => authController.auth(req, res));
 
 export { authRoute };

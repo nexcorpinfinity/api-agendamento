@@ -13,9 +13,12 @@ import { LogLevel } from './types/LogLevel';
 
 dotenv.config();
 
+if (!process.env.FRONT_END) {
+    throw new Error('FRONT END URL NOT CONFIGURED IN .ENV PLEASE INSERT THE URL IN .ENV');
+}
+
 const whitelistUrlPermitted: string[] = [
-    process.env.WHITELIST1 as string,
-    process.env.WHITELIST2 as string,
+    process.env.FRONT_END as string,
     process.env.WHITELIST3 as string,
 ];
 

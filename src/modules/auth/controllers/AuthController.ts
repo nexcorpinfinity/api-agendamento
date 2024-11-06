@@ -62,12 +62,12 @@ export class AuthController {
             }
 
             const token = authSession;
-            const redirectUrl = `http://localhost:5173/auth/success?token=${token}`;
+            const redirectUrl = `${process.env.FRONT_END}/auth/success?token=${token}`;
 
             return res.redirect(redirectUrl);
         } catch (error) {
             console.log(error);
-            res.redirect('http://localhost:3000/error?error=authentication_failed');
+            res.redirect(`${process.env.FRONT_END}/error?error=authentication_failed`);
         }
     }
 }
