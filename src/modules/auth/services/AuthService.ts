@@ -154,7 +154,8 @@ export class AuthService implements IAuthService {
                     return existingUser;
                 }
 
-                const { id, name, permission } = existingUser;
+                const { id, name, permission, password, number_phone } = existingUser;
+
                 console.log(id, name, permission);
 
                 if (permission === Permissions.Costumer) {
@@ -164,8 +165,23 @@ export class AuthService implements IAuthService {
 
                     // console.log('getIdBusiness', getIdBusiness);
 
-                    if (getIdBusiness instanceof Error) {
-                        return getIdBusiness;
+                    if (!getIdBusiness && !password && !number_phone) {
+                        return jwt.sign(
+                            {
+                                id: id,
+                                businessId: null,
+                                name: name,
+                                permission: permission,
+                                jti: uuidv4(),
+                                setNewPhoneNumber: true,
+                                setNewPass: true,
+                                setNameBusiness: true,
+                            },
+                            process.env.TOKEN_SECRET as string,
+                            {
+                                expiresIn: '1d',
+                            },
+                        );
                     }
 
                     return this.generateToken(
@@ -176,6 +192,24 @@ export class AuthService implements IAuthService {
                         true,
                     );
                 } else if (permission === Permissions.Client) {
+                    if (!password && !number_phone) {
+                        return jwt.sign(
+                            {
+                                id: id,
+                                businessId: null,
+                                name: name,
+                                permission: permission,
+                                jti: uuidv4(),
+                                setNewPhoneNumber: true,
+                                setNewPass: true,
+                            },
+                            process.env.TOKEN_SECRET as string,
+                            {
+                                expiresIn: '1d',
+                            },
+                        );
+                    }
+
                     return this.generateToken(
                         String(id),
                         String(name),
@@ -184,6 +218,24 @@ export class AuthService implements IAuthService {
                         true,
                     );
                 } else if (permission === Permissions.Admin) {
+                    if (!password && !number_phone) {
+                        return jwt.sign(
+                            {
+                                id: id,
+                                businessId: null,
+                                name: name,
+                                permission: permission,
+                                jti: uuidv4(),
+                                setNewPhoneNumber: true,
+                                setNewPass: true,
+                            },
+                            process.env.TOKEN_SECRET as string,
+                            {
+                                expiresIn: '1d',
+                            },
+                        );
+                    }
+
                     return this.generateToken(
                         String(id),
                         String(name),

@@ -37,7 +37,7 @@ export class AuthController {
     public async authWithGoogle(
         req: Request,
         res: Response,
-    ): Promise<Response<string, Record<string, string>>> {
+    ): Promise<void | Response<string, Record<string, string>>> {
         // const profile = req.user;
         const accountType = req.query.state as string;
         // cada auth via google no front tem q ter 2 caminho para cadastro um para comercio e outro para cliente pois pega pelo parametro esse state, parametro auth/google?accountType=client || auth/google?accountType=business
@@ -61,14 +61,13 @@ export class AuthController {
                 return ResponseHandler.error(res, 401, authSession.message);
             }
 
-            return ResponseHandler.success(
-                res,
-                200,
-                { token: authSession },
-                'Login feito com sucesso.',
-            );
+            const token = authSession;
+            const redirectUrl = `http://localhost:5173/auth/success?token=${token}`;
+
+            return res.redirect(redirectUrl);
         } catch (error) {
-            return ResponseHandler.error(res, 500);
+            console.log(error);
+            res.redirect('http://localhost:3000/error?error=authentication_failed');
         }
     }
 }
